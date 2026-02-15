@@ -1,5 +1,8 @@
 {
   "1.0.0": {
     "en": "First version!"
+  },
+  "1.0.1": {
+    "en": "Added oudside temperature. Fixed issued on change temperature flow."
   }
 }
