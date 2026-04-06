@@ -101,6 +101,11 @@ module.exports = class AtagOneDriver extends Homey.Driver {
           email: this.pairingData.email,
           poll_interval: 30,
           offline_retry_threshold: 10,
+          temperature_write_retries_enabled: true,
+          temperature_write_max_attempts: 5,
+          temperature_write_retry_interval: 5,
+          temperature_write_verify_enabled: true,
+          temperature_write_verify_delay: 2,
         },
       }];
 

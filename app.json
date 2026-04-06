@@ -648,6 +648,97 @@
                 "de": "Anzahl aufeinanderfolgender fehlgeschlagener Abfragen, bevor Homey das Thermostat als offline markiert",
                 "fr": "Nombre de sondages consecutifs echoues avant que Homey marque le thermostat hors ligne"
               }
+            },
+            {
+              "id": "temperature_write_retries_enabled",
+              "type": "checkbox",
+              "label": {
+                "en": "Retry temperature writes",
+                "nl": "Temperatuurwrites opnieuw proberen",
+                "de": "Temperatur-Schreibvorgange wiederholen",
+                "fr": "Relancer les ecritures de temperature"
+              },
+              "value": true,
+              "hint": {
+                "en": "Retry setting the target temperature after temporary failures",
+                "nl": "Probeer het instellen van de doeltemperatuur opnieuw na tijdelijke fouten",
+                "de": "Versucht das Setzen der Zieltemperatur nach temporaren Fehlern erneut",
+                "fr": "Reessaie de regler la temperature cible apres des erreurs temporaires"
+              }
+            },
+            {
+              "id": "temperature_write_max_attempts",
+              "type": "number",
+              "label": {
+                "en": "Temperature write attempts",
+                "nl": "Pogingen voor temperatuurwrite",
+                "de": "Versuche fur Temperaturschreiben",
+                "fr": "Tentatives d'ecriture de temperature"
+              },
+              "value": 5,
+              "min": 1,
+              "max": 10,
+              "hint": {
+                "en": "Maximum number of attempts to set the target temperature before failing",
+                "nl": "Maximaal aantal pogingen om de doeltemperatuur in te stellen voordat het mislukt",
+                "de": "Maximale Anzahl an Versuchen zum Setzen der Zieltemperatur, bevor es fehlschlagt",
+                "fr": "Nombre maximal de tentatives pour regler la temperature cible avant echec"
+              }
+            },
+            {
+              "id": "temperature_write_retry_interval",
+              "type": "number",
+              "label": {
+                "en": "Retry interval (seconds)",
+                "nl": "Retry-interval (seconden)",
+                "de": "Wiederholungsintervall (Sekunden)",
+                "fr": "Intervalle de nouvelle tentative (secondes)"
+              },
+              "value": 5,
+              "min": 0,
+              "max": 60,
+              "hint": {
+                "en": "How long to wait between retry attempts after a temporary write failure",
+                "nl": "Hoe lang er gewacht wordt tussen retries na een tijdelijke write-fout",
+                "de": "Wie lange zwischen Wiederholungen nach einem temporaren Schreibfehler gewartet wird",
+                "fr": "Temps d'attente entre les nouvelles tentatives apres un echec temporaire"
+              }
+            },
+            {
+              "id": "temperature_write_verify_enabled",
+              "type": "checkbox",
+              "label": {
+                "en": "Verify after write",
+                "nl": "Verifieer na write",
+                "de": "Nach Schreiben verifizieren",
+                "fr": "Verifier apres ecriture"
+              },
+              "value": true,
+              "hint": {
+                "en": "Read back the thermostat after writing to confirm the target temperature was applied",
+                "nl": "Lees de thermostaat na een write terug om te bevestigen dat de doeltemperatuur is toegepast",
+                "de": "Liest das Thermostat nach dem Schreiben aus, um die Zieltemperatur zu bestatigen",
+                "fr": "Relit le thermostat apres ecriture pour confirmer que la temperature cible a ete appliquee"
+              }
+            },
+            {
+              "id": "temperature_write_verify_delay",
+              "type": "number",
+              "label": {
+                "en": "Verify delay (seconds)",
+                "nl": "Verificatiedelay (seconden)",
+                "de": "Verzogerung fur Verifikation (Sekunden)",
+                "fr": "Delai de verification (secondes)"
+              },
+              "value": 2,
+              "min": 0,
+              "max": 30,
+              "hint": {
+                "en": "How long to wait after writing before reading back the thermostat for verification",
+                "nl": "Hoe lang er gewacht wordt na een write voordat de thermostaat ter verificatie wordt uitgelezen",
+                "de": "Wie lange nach dem Schreiben gewartet wird, bevor zur Verifikation erneut gelesen wird",
+                "fr": "Temps d'attente apres l'ecriture avant la relecture de verification"
+              }
             }
           ]
         }

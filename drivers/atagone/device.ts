@@ -9,6 +9,11 @@ interface DeviceSettings {
   email: string;
   poll_interval: number;
   offline_retry_threshold: number;
+  temperature_write_retries_enabled: boolean;
+  temperature_write_max_attempts: number;
+  temperature_write_retry_interval: number;
+  temperature_write_verify_enabled: boolean;
+  temperature_write_verify_delay: number;
 }
 
 module.exports = class AtagOneDevice extends Homey.Device {
@@ -18,6 +23,7 @@ module.exports = class AtagOneDevice extends Homey.Device {
   private boostTimeout?: ReturnType<typeof setTimeout>;
   private previousTemperature?: number;
   private consecutivePollFailures = 0;
+  private activeTemperatureWriteToken = 0;
 
   // Flow card references
   private temperatureChangedTrigger!: Homey.FlowCardTriggerDevice;
@@ -57,7 +63,7 @@ module.exports = class AtagOneDevice extends Homey.Device {
     this.registerCapabilityListener('target_temperature', async (value: number) => {
       this.log('Setting target temperature to:', value);
       try {
-        await this.api.setTargetTemperature(value);
+        await this.setTargetTemperatureWithRetry(value, true);
         this.log('Target temperature set successfully');
       } catch (error) {
         this.error('Failed to set target temperature:', error);
@@ -121,8 +127,7 @@ module.exports = class AtagOneDevice extends Homey.Device {
     const setTemperatureAction = this.homey.flow.getActionCard('set_temperature');
     setTemperatureAction.registerRunListener(async (args) => {
       this.log('Flow action: Setting temperature to', args.temperature);
-      await this.api.setTargetTemperature(args.temperature);
-      await this.setCapabilityValue('target_temperature', args.temperature);
+      await this.setTargetTemperatureWithRetry(args.temperature, true);
     });
 
     const setTemperatureDurationAction = this.homey.flow.getActionCard('set_temperature_duration');
@@ -133,8 +138,7 @@ module.exports = class AtagOneDevice extends Homey.Device {
       this.previousTemperature = this.getCapabilityValue('target_temperature');
 
       // Set new temperature
-      await this.api.setTargetTemperature(args.temperature);
-      await this.setCapabilityValue('target_temperature', args.temperature);
+      await this.setTargetTemperatureWithRetry(args.temperature, true);
 
       // Clear any existing boost timeout
       if (this.boostTimeout) {
@@ -262,8 +266,124 @@ module.exports = class AtagOneDevice extends Homey.Device {
     }
 
     this.log('Boost mode ended, restoring temperature to', this.previousTemperature);
-    await this.api.setTargetTemperature(this.previousTemperature);
-    await this.setCapabilityValue('target_temperature', this.previousTemperature);
+    await this.setTargetTemperatureWithRetry(this.previousTemperature, true);
+  }
+
+  private getTemperatureWriteSettings() {
+    const settings = this.getSettings() as DeviceSettings;
+
+    return {
+      retriesEnabled: settings.temperature_write_retries_enabled ?? true,
+      maxAttempts: Math.max(1, settings.temperature_write_max_attempts ?? 5),
+      retryIntervalMs: Math.max(0, settings.temperature_write_retry_interval ?? 5) * 1000,
+      verifyEnabled: settings.temperature_write_verify_enabled ?? true,
+      verifyDelayMs: Math.max(0, settings.temperature_write_verify_delay ?? 2) * 1000,
+    };
+  }
+
+  private normalizeTargetTemperature(temperature: number): number {
+    const roundedTemperature = Math.round(temperature * 2) / 2;
+    return Math.max(4, Math.min(27, roundedTemperature));
+  }
+
+  private async setTargetTemperatureWithRetry(
+    temperature: number,
+    updateCapabilityValue: boolean = false,
+  ): Promise<void> {
+    const targetTemperature = this.normalizeTargetTemperature(temperature);
+    const writeSettings = this.getTemperatureWriteSettings();
+    const maxAttempts = writeSettings.retriesEnabled ? writeSettings.maxAttempts : 1;
+    const writeToken = ++this.activeTemperatureWriteToken;
+    let lastError: Error | undefined;
+
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+      try {
+        this.ensureActiveTemperatureWrite(writeToken);
+
+        this.log(
+          'Setting target temperature attempt',
+          attempt,
+          'of',
+          maxAttempts,
+          'to',
+          targetTemperature,
+        );
+
+        await this.api.setTargetTemperature(targetTemperature);
+        this.ensureActiveTemperatureWrite(writeToken);
+
+        if (writeSettings.verifyEnabled) {
+          if (writeSettings.verifyDelayMs > 0) {
+            await this.delay(writeSettings.verifyDelayMs);
+            this.ensureActiveTemperatureWrite(writeToken);
+          }
+
+          const data = await this.api.getData();
+          this.ensureActiveTemperatureWrite(writeToken);
+          if (data.targetTemperature !== targetTemperature) {
+            throw new Error(
+              `Verification failed: thermostat reports ${data.targetTemperature ?? 'unknown'}°C instead of ${targetTemperature}°C`,
+            );
+          }
+        }
+
+        if (updateCapabilityValue) {
+          this.ensureActiveTemperatureWrite(writeToken);
+          await this.setCapabilityValue('target_temperature', targetTemperature);
+        }
+
+        return;
+      } catch (error) {
+        lastError = error instanceof Error ? error : new Error(String(error));
+        const retryable = this.isRetryableTemperatureWriteError(lastError);
+        const hasAttemptsLeft = attempt < maxAttempts;
+
+        this.error(`Temperature write attempt ${attempt}/${maxAttempts} failed:`, lastError);
+
+        if (!retryable || !hasAttemptsLeft) {
+          throw new Error(
+            `Temperature could not be set to ${targetTemperature}°C after ${attempt} of ${maxAttempts} attempts: ${lastError.message}`,
+          );
+        }
+
+        this.log('Retrying target temperature write in', writeSettings.retryIntervalMs, 'ms');
+        await this.delay(writeSettings.retryIntervalMs);
+      }
+    }
+
+    throw new Error(
+      `Temperature could not be set to ${targetTemperature}°C after ${maxAttempts} attempts: ${lastError?.message ?? 'Unknown error'}`,
+    );
+  }
+
+  private isRetryableTemperatureWriteError(error: Error): boolean {
+    const message = error.message.toLowerCase();
+
+    if (
+      message.includes('authorization denied')
+      || message.includes('authorization pending')
+      || message.includes('verification failed')
+      || message.includes('superseded by a newer temperature change')
+    ) {
+      return false;
+    }
+
+    return true;
+  }
+
+  private ensureActiveTemperatureWrite(writeToken: number): void {
+    if (writeToken !== this.activeTemperatureWriteToken) {
+      throw new Error('Temperature write superseded by a newer temperature change');
+    }
+  }
+
+  private async delay(ms: number): Promise<void> {
+    if (ms <= 0) {
+      return;
+    }
+
+    // eslint-disable-next-line homey-app/global-timers
+    await new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   private async updateCapabilitiesAndTriggerFlows(data: ThermostatData) {
