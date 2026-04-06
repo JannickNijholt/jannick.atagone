@@ -4,5 +4,8 @@
   },
   "1.0.1": {
     "en": "Added oudside temperature. Fixed issued on change temperature flow."
+  },
+  "1.0.2": {
+    "en": "Renamed the app for this fork, updated maintainer details, and kept attribution to the original author."
   }
 }

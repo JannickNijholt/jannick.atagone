@@ -1,4 +1,6 @@
-# Installatiehandleiding ATAG One app op Homey
+# Installatiehandleiding jannick.atagone op Homey
+
+Deze variant is een fork van de originele ATAG One Homey app, oorspronkelijk gemaakt door Alwin ter Stege.
 
 Om de ATAG One app op je Homey te installeren heb je een aantal gegevens nodig.  
 Volg onderstaande stappen om deze te verzamelen en de installatie succesvol af te ronden.
@@ -34,14 +36,14 @@ Ga naar je **ATAG One thermostaat** en volg deze stappen:
 
 ---
 
-## 3. Installatie van de ATAG One app in Homey
+## 3. Installatie van de jannick.atagone app in Homey
 
 1. Open de Homey app op je telefoon  
    **of** ga in je browser naar: https://my.homey.app
 2. Ga naar **Apparaten**.
 3. Klik op **+ Nieuw apparaat**.
-4. Zoek op **ATAG** en selecteer **ATAG One**.
-5. Kies **ATAG One 2.0** en klik op **Installeren**.
+4. Zoek op **jannick.atagone**.
+5. Kies **jannick.atagone** en klik op **Installeren**.
 6. Vul de gevraagde gegevens in:
 
    - **IP-adres**  
