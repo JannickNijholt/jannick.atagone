@@ -16,6 +16,45 @@
     color: #666;
     margin-top: 4px;
   }
+
+  .atag-status {
+    display: none;
+    margin-top: 16px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    background: #f4f7fb;
+    border: 1px solid #d8e0ea;
+  }
+
+  .atag-status.is-visible {
+    display: block;
+  }
+
+  .atag-status.is-error {
+    background: #fff1f1;
+    border-color: #f0c2c2;
+  }
+
+  .atag-status.is-success {
+    background: #eef8f1;
+    border-color: #bfdcc6;
+  }
+
+  .atag-status-title {
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .atag-status-attempt {
+    font-size: 13px;
+    color: #4f5b66;
+    margin-bottom: 6px;
+  }
+
+  .atag-status-message {
+    font-size: 14px;
+    line-height: 1.4;
+  }
 </style>
 
 <div id="atag-wrap">
@@ -74,6 +113,12 @@
     disabled="disabled"
     data-i18n="pair.configure.connect"
   >Connect</button>
+
+  <div id="atag-status" class="atag-status" aria-live="polite">
+    <div id="atag-status-title" class="atag-status-title">Waiting to start pairing</div>
+    <div id="atag-status-attempt" class="atag-status-attempt"></div>
+    <div id="atag-status-message" class="atag-status-message">Enter your details and start pairing.</div>
+  </div>
 </div>
 
 <script type="text/javascript">
@@ -83,9 +128,76 @@
     var $deviceName = document.getElementById('device_name');
     var $email = document.getElementById('email');
     var $connect = document.getElementById('atag-connect');
+    var $status = document.getElementById('atag-status');
+    var $statusTitle = document.getElementById('atag-status-title');
+    var $statusAttempt = document.getElementById('atag-status-attempt');
+    var $statusMessage = document.getElementById('atag-status-message');
+    var pollTimer = null;
+
+    function setInputsDisabled(disabled) {
+      [$ipAddress, $macAddress, $deviceName, $email].forEach(function($input) {
+        $input.disabled = disabled;
+      });
+    }
+
+    function renderStatus(progress) {
+      if (!progress) return;
+
+      $status.classList.add('is-visible');
+      $status.classList.remove('is-error', 'is-success');
+
+      if (progress.state === 'error') {
+        $status.classList.add('is-error');
+      }
+
+      if (progress.state === 'success') {
+        $status.classList.add('is-success');
+      }
+
+      if (progress.state === 'running') {
+        $statusTitle.textContent = 'Pairing with thermostat';
+      } else if (progress.state === 'success') {
+        $statusTitle.textContent = 'Pairing completed';
+      } else if (progress.state === 'error') {
+        $statusTitle.textContent = 'Pairing failed';
+      } else {
+        $statusTitle.textContent = 'Waiting to start pairing';
+      }
+
+      if (progress.attempt && progress.totalAttempts) {
+        $statusAttempt.textContent = 'Attempt ' + progress.attempt + '/' + progress.totalAttempts;
+      } else {
+        $statusAttempt.textContent = '';
+      }
+
+      $statusMessage.textContent = progress.message || '';
+    }
+
+    function stopProgressPolling() {
+      if (pollTimer) {
+        clearInterval(pollTimer);
+        pollTimer = null;
+      }
+    }
+
+    function startProgressPolling() {
+      stopProgressPolling();
+
+      pollTimer = setInterval(function() {
+        Homey.emit('get_pair_progress')
+          .then(function(progress) {
+            renderStatus(progress);
+          })
+          .catch(function() {
+            // Ignore transient polling errors while pairing is still in progress.
+          });
+      }, 500);
+    }
 
     // Enable/disable connect button based on form validity
     function validateForm() {
+      if ($connect.classList.contains('is-loading')) return;
+
       var isValid = $ipAddress.value.trim().length > 0
         && $macAddress.value.trim().length > 0
         && $deviceName.value.trim().length > 0
@@ -113,6 +225,15 @@
     $connect.addEventListener('click', function() {
       if ($connect.classList.contains('is-loading')) return;
       $connect.classList.add('is-loading');
+      $connect.textContent = 'Pairing...';
+      setInputsDisabled(true);
+      renderStatus({
+        state: 'running',
+        attempt: 1,
+        totalAttempts: 5,
+        message: 'Connecting to the thermostat. Please press YES on your ATAG One when prompted.'
+      });
+      startProgressPolling();
 
       var data = {
         ipAddress: $ipAddress.value.trim(),
@@ -123,13 +244,30 @@
 
       Homey.emit('configure', data)
         .then(function(result) {
+          stopProgressPolling();
+          renderStatus({
+            state: 'success',
+            attempt: result && result.attempt ? result.attempt : 0,
+            totalAttempts: result && result.totalAttempts ? result.totalAttempts : 0,
+            message: 'Authorization granted. Opening the next step.'
+          });
           Homey.showView('list_devices');
         })
         .catch(function(err) {
+          stopProgressPolling();
+          renderStatus({
+            state: 'error',
+            attempt: 0,
+            totalAttempts: 0,
+            message: err.message || err || Homey.__('errors.connection_failed')
+          });
           Homey.alert(err.message || err || Homey.__('errors.connection_failed'));
         })
         .finally(function() {
           $connect.classList.remove('is-loading');
+          $connect.textContent = 'Connect';
+          setInputsDisabled(false);
+          validateForm();
         });
     });
   })();

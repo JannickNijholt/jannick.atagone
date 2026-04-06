@@ -9,7 +9,18 @@ interface PairingData {
   email: string;
 }
 
+interface PairingProgress {
+  state: 'idle' | 'running' | 'success' | 'error';
+  attempt: number;
+  totalAttempts: number;
+  status: AuthStatus | null;
+  message: string;
+}
+
 module.exports = class AtagOneDriver extends Homey.Driver {
+  private static readonly PAIR_MAX_ATTEMPTS = 5;
+  private static readonly PAIR_RETRY_INTERVAL_MS = 1000;
+  private static readonly PAIR_REQUEST_TIMEOUT_MS = 18000;
 
   private pairingData: PairingData = {
     ipAddress: '',
@@ -25,6 +36,14 @@ module.exports = class AtagOneDriver extends Homey.Driver {
   async onPair(session: Homey.Driver.PairSession) {
     this.log('Pairing session started');
 
+    let pairingProgress: PairingProgress = {
+      state: 'idle',
+      attempt: 0,
+      totalAttempts: AtagOneDriver.PAIR_MAX_ATTEMPTS,
+      status: null,
+      message: 'Waiting to start pairing.',
+    };
+
     // Reset pairing data
     this.pairingData = {
       ipAddress: '',
@@ -37,6 +56,8 @@ module.exports = class AtagOneDriver extends Homey.Driver {
     session.setHandler('showView', async (viewId: string) => {
       this.log('Showing view:', viewId);
     });
+
+    session.setHandler('get_pair_progress', async () => pairingProgress);
 
     // Handle configure event from custom view
     session.setHandler('configure', async (data: PairingData) => {
@@ -58,24 +79,83 @@ module.exports = class AtagOneDriver extends Homey.Driver {
       });
 
       try {
-        // Send pair request
-        this.log('Sending pair request to thermostat...');
-        const status = await api.pair();
-        this.log('Pair request result:', status);
+        pairingProgress = {
+          state: 'running',
+          attempt: 1,
+          totalAttempts: AtagOneDriver.PAIR_MAX_ATTEMPTS,
+          status: null,
+          message: 'Connecting to the thermostat. Please press YES on your ATAG One when prompted.',
+        };
+
+        this.log('Starting authorization flow; waiting for thermostat approval...');
+        const status = await api.waitForAuthorization(
+          AtagOneDriver.PAIR_MAX_ATTEMPTS,
+          AtagOneDriver.PAIR_RETRY_INTERVAL_MS,
+          AtagOneDriver.PAIR_REQUEST_TIMEOUT_MS,
+          (currentStatus, attempt, totalAttempts) => {
+            let message = `Attempt ${attempt}/${totalAttempts}: waiting for confirmation on the thermostat.`;
+
+            if (currentStatus === AuthStatus.GRANTED) {
+              message = `Attempt ${attempt}/${totalAttempts}: authorization granted.`;
+            } else if (currentStatus === AuthStatus.DENIED) {
+              message = `Attempt ${attempt}/${totalAttempts}: authorization denied on the thermostat.`;
+            }
+
+            pairingProgress = {
+              state: 'running',
+              attempt,
+              totalAttempts,
+              status: currentStatus,
+              message,
+            };
+
+            this.log('Pair request result:', currentStatus);
+          },
+        );
 
         if (status === AuthStatus.GRANTED) {
+          pairingProgress = {
+            state: 'success',
+            attempt: pairingProgress.attempt,
+            totalAttempts: pairingProgress.totalAttempts,
+            status,
+            message: 'Authorization granted. Preparing device setup.',
+          };
           this.log('Authorization granted!');
-          return { success: true };
+          return {
+            success: true,
+            attempt: pairingProgress.attempt,
+            totalAttempts: pairingProgress.totalAttempts,
+          };
         }
 
         if (status === AuthStatus.DENIED) {
           throw new Error('Authorization denied by thermostat');
         }
 
-        // Status is PENDING
-        throw new Error('Please press YES on your ATAG One thermostat to authorize, then try again');
+        throw new Error('Authorization is still pending. Please press YES on your ATAG One thermostat and try again.');
       } catch (error) {
         this.error('Pairing error:', error);
+
+        if (error instanceof Error && error.message === 'Authorization timeout') {
+          pairingProgress = {
+            state: 'error',
+            attempt: pairingProgress.totalAttempts,
+            totalAttempts: pairingProgress.totalAttempts,
+            status: AuthStatus.PENDING,
+            message: `No confirmation received after ${pairingProgress.totalAttempts} attempts. Please press YES on your ATAG One thermostat and try again.`,
+          };
+          throw new Error('No confirmation received from the thermostat within 90 seconds. Please press YES on your ATAG One thermostat and try again.');
+        }
+
+        pairingProgress = {
+          state: 'error',
+          attempt: pairingProgress.attempt,
+          totalAttempts: pairingProgress.totalAttempts,
+          status: pairingProgress.status,
+          message: error instanceof Error ? error.message : 'Pairing failed.',
+        };
+
         throw error;
       }
     });

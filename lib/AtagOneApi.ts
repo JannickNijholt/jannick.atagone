@@ -136,6 +136,7 @@ export interface ConnectionSettings {
 export class AtagOneApi {
   private static readonly PORT = 10000;
   private static readonly TIMEOUT = 10000;
+  private static readonly PAIR_TIMEOUT = 30000;
   private static readonly MIN_TEMP = 4;
   private static readonly MAX_TEMP = 27;
 
@@ -171,7 +172,7 @@ export class AtagOneApi {
   /**
    * Make HTTP POST request to thermostat
    */
-  private async request<T>(path: string, data: object): Promise<T> {
+  private async request<T>(path: string, data: object, timeoutMs: number = AtagOneApi.TIMEOUT): Promise<T> {
     return new Promise((resolve, reject) => {
       const jsonData = JSON.stringify(data);
 
@@ -184,7 +185,7 @@ export class AtagOneApi {
           'Content-Type': 'application/json',
           'Content-Length': Buffer.byteLength(jsonData),
         },
-        timeout: AtagOneApi.TIMEOUT,
+        timeout: timeoutMs,
       };
 
       const req = http.request(options, (res) => {
@@ -222,7 +223,7 @@ export class AtagOneApi {
    * Send pair/authorization request to thermostat
    * User must press "Yes" on the thermostat to authorize
    */
-  public async pair(): Promise<AuthStatus> {
+  public async pair(timeoutMs: number = AtagOneApi.PAIR_TIMEOUT): Promise<AuthStatus> {
     const pairMessage = {
       pair_message: {
         seqnr: 1,
@@ -243,7 +244,7 @@ export class AtagOneApi {
       },
     };
 
-    const response = await this.request<PairResponse>('/pair_message', pairMessage);
+    const response = await this.request<PairResponse>('/pair_message', pairMessage, timeoutMs);
 
     if (response.pair_reply?.acc_status !== undefined) {
       return response.pair_reply.acc_status as AuthStatus;
@@ -256,15 +257,26 @@ export class AtagOneApi {
    * Poll authorization status until granted, denied, or timeout
    */
   public async waitForAuthorization(
-    maxAttempts: number = 30,
+    maxAttempts: number = 3,
     intervalMs: number = 2000,
-    onStatus?: (status: AuthStatus) => void,
+    requestTimeoutMs: number = AtagOneApi.PAIR_TIMEOUT,
+    onStatus?: (status: AuthStatus, attempt: number, totalAttempts: number) => void,
   ): Promise<AuthStatus> {
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
-      const status = await this.pair();
+      let status: AuthStatus;
+
+      try {
+        status = await this.pair(requestTimeoutMs);
+      } catch (error) {
+        if (error instanceof Error && error.message === 'Request timeout') {
+          status = AuthStatus.PENDING;
+        } else {
+          throw error;
+        }
+      }
 
       if (onStatus) {
-        onStatus(status);
+        onStatus(status, attempt + 1, maxAttempts);
       }
 
       if (status === AuthStatus.GRANTED) {
