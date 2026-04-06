@@ -65,6 +65,7 @@ export interface RetrieveResponse {
       dhw_flow_rate?: number;
       resets?: number;
       memory_allocation?: number;
+      rel_mod_level?: number;
       details?: {
         rel_mod_level?: number;
       };
@@ -402,6 +403,7 @@ export class AtagOneApi {
     const centralHeatingActive = (boilerStatus & 2) !== 0;
     const hotWaterActive = (boilerStatus & 4) !== 0;
     const burnerActive = (boilerStatus & 8) !== 0;
+    const flameLevel = reply.report?.rel_mod_level ?? reply.report?.details?.rel_mod_level;
 
     // Outside temperature: prefer weather_temp (from weather service), fall back to outside_temp sensor
     const outsideTemp = reply.control?.weather_temp ?? reply.report?.outside_temp;
@@ -423,7 +425,7 @@ export class AtagOneApi {
       chReturnTemperature: reply.report?.ch_return_temp,
       dhwWaterTemperature: reply.report?.dhw_water_temp,
       burningHours: reply.report?.burning_hours,
-      flameLevel: reply.report?.details?.rel_mod_level,
+      flameLevel,
       centralHeatingActive,
       burnerActive,
       hotWaterActive,
