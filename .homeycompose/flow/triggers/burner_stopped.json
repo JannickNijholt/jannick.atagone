@@ -1,0 +1,22 @@
+{
+  "id": "burner_stopped",
+  "title": {
+    "en": "The burner stopped",
+    "nl": "De brander is gestopt",
+    "de": "Der Brenner hat gestoppt",
+    "fr": "Le brûleur s'est arrêté"
+  },
+  "hint": {
+    "en": "When the burner becomes inactive",
+    "nl": "Wanneer de brander inactief wordt",
+    "de": "Wenn der Brenner inaktiv wird",
+    "fr": "Quand le brûleur devient inactif"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=atagone"
+    }
+  ]
+}

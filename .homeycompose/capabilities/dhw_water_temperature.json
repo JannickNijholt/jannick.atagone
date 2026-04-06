@@ -1,0 +1,22 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Hot water temperature",
+    "nl": "Tapwatertemperatuur",
+    "de": "Warmwassertemperatur",
+    "fr": "Température d'eau chaude"
+  },
+  "units": {
+    "en": "°C",
+    "nl": "°C",
+    "de": "°C",
+    "fr": "°C"
+  },
+  "insights": true,
+  "chartType": "spline",
+  "decimals": 1,
+  "getable": true,
+  "setable": false,
+  "icon": "/assets/temperature_generic.svg",
+  "uiComponent": "sensor"
+}

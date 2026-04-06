@@ -1,0 +1,22 @@
+{
+  "id": "hot_water_stopped",
+  "title": {
+    "en": "Hot water stopped",
+    "nl": "Tapwater is gestopt",
+    "de": "Warmwasser hat aufgehört",
+    "fr": "L'eau chaude s'est arrêtée"
+  },
+  "hint": {
+    "en": "When hot water production becomes inactive",
+    "nl": "Wanneer tapwaterproductie inactief wordt",
+    "de": "Wenn die Warmwasserbereitung inaktiv wird",
+    "fr": "Quand la production d'eau chaude devient inactive"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=atagone"
+    }
+  ]
+}

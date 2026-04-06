@@ -1,0 +1,35 @@
+{
+  "id": "dhw_mode_changed",
+  "title": {
+    "en": "The hot water mode changed",
+    "nl": "De tapwatermodus is veranderd",
+    "de": "Der Warmwassermodus hat sich geändert",
+    "fr": "Le mode eau chaude a changé"
+  },
+  "hint": {
+    "en": "When the hot water mode changes",
+    "nl": "Wanneer de tapwatermodus verandert",
+    "de": "Wenn sich der Warmwassermodus ändert",
+    "fr": "Quand le mode eau chaude change"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=atagone"
+    }
+  ],
+  "tokens": [
+    {
+      "name": "mode",
+      "type": "string",
+      "title": {
+        "en": "Mode",
+        "nl": "Modus",
+        "de": "Modus",
+        "fr": "Mode"
+      },
+      "example": "eco"
+    }
+  ]
+}

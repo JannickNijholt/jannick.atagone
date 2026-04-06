@@ -1,0 +1,142 @@
+{
+  "type": "enum",
+  "title": {
+    "en": "Weather status",
+    "nl": "Weerstatus",
+    "de": "Wetterstatus",
+    "fr": "Statut meteo"
+  },
+  "values": [
+    {
+      "id": "sunny",
+      "title": {
+        "en": "Sunny",
+        "nl": "Zonnig",
+        "de": "Sonnig",
+        "fr": "Ensoleille"
+      }
+    },
+    {
+      "id": "clear",
+      "title": {
+        "en": "Clear",
+        "nl": "Helder",
+        "de": "Klar",
+        "fr": "Degage"
+      }
+    },
+    {
+      "id": "rainy",
+      "title": {
+        "en": "Rainy",
+        "nl": "Regenachtig",
+        "de": "Regnerisch",
+        "fr": "Pluvieux"
+      }
+    },
+    {
+      "id": "snowy",
+      "title": {
+        "en": "Snowy",
+        "nl": "Sneeuwachtig",
+        "de": "Schnee",
+        "fr": "Neigeux"
+      }
+    },
+    {
+      "id": "hail",
+      "title": {
+        "en": "Hail",
+        "nl": "Hagel",
+        "de": "Hagel",
+        "fr": "Grele"
+      }
+    },
+    {
+      "id": "windy",
+      "title": {
+        "en": "Windy",
+        "nl": "Winderig",
+        "de": "Windig",
+        "fr": "Venteux"
+      }
+    },
+    {
+      "id": "misty",
+      "title": {
+        "en": "Misty",
+        "nl": "Mistig",
+        "de": "Neblig",
+        "fr": "Brumeux"
+      }
+    },
+    {
+      "id": "cloudy",
+      "title": {
+        "en": "Cloudy",
+        "nl": "Bewolkt",
+        "de": "Bewoelkt",
+        "fr": "Nuageux"
+      }
+    },
+    {
+      "id": "partly_sunny",
+      "title": {
+        "en": "Partly sunny",
+        "nl": "Half zonnig",
+        "de": "Teilweise sonnig",
+        "fr": "Partiellement ensoleille"
+      }
+    },
+    {
+      "id": "partly_cloudy",
+      "title": {
+        "en": "Partly cloudy",
+        "nl": "Half bewolkt",
+        "de": "Teilweise bewoelkt",
+        "fr": "Partiellement nuageux"
+      }
+    },
+    {
+      "id": "shower",
+      "title": {
+        "en": "Shower",
+        "nl": "Bui",
+        "de": "Schauer",
+        "fr": "Averse"
+      }
+    },
+    {
+      "id": "lightning",
+      "title": {
+        "en": "Thunderstorm",
+        "nl": "Onweer",
+        "de": "Gewitter",
+        "fr": "Orage"
+      }
+    },
+    {
+      "id": "hurricane",
+      "title": {
+        "en": "Storm",
+        "nl": "Storm",
+        "de": "Sturm",
+        "fr": "Tempete"
+      }
+    },
+    {
+      "id": "unknown",
+      "title": {
+        "en": "Unknown",
+        "nl": "Onbekend",
+        "de": "Unbekannt",
+        "fr": "Inconnu"
+      }
+    }
+  ],
+  "icon": "/assets/weather_status.svg",
+  "insights": false,
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor"
+}

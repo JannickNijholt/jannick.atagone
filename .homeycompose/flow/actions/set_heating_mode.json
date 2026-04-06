@@ -1,0 +1,58 @@
+{
+  "id": "set_heating_mode",
+  "title": {
+    "en": "Set the heating mode",
+    "nl": "Stel de verwarmingsmodus in",
+    "de": "Heizmodus einstellen",
+    "fr": "Régler le mode chauffage"
+  },
+  "titleFormatted": {
+    "en": "Set the heating mode to [[mode]]",
+    "nl": "Stel de verwarmingsmodus in op [[mode]]",
+    "de": "Heizmodus auf [[mode]] einstellen",
+    "fr": "Régler le mode chauffage sur [[mode]]"
+  },
+  "hint": {
+    "en": "Set the heating mode.",
+    "nl": "Stel de verwarmingsmodus in.",
+    "de": "Stellen Sie den Heizmodus ein.",
+    "fr": "Reglez le mode chauffage."
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=atagone"
+    },
+    {
+      "type": "dropdown",
+      "name": "mode",
+      "title": {
+        "en": "Mode",
+        "nl": "Modus",
+        "de": "Modus",
+        "fr": "Mode"
+      },
+      "values": [
+        {
+          "id": "heat",
+          "title": {
+            "en": "Heating",
+            "nl": "Verwarmen",
+            "de": "Heizen",
+            "fr": "Chauffage"
+          }
+        },
+        {
+          "id": "auto",
+          "title": {
+            "en": "Automatic",
+            "nl": "Automatisch",
+            "de": "Automatisch",
+            "fr": "Automatique"
+          }
+        }
+      ]
+    }
+  ]
+}

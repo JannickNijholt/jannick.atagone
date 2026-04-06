@@ -1,0 +1,35 @@
+{
+  "id": "heating_mode_changed",
+  "title": {
+    "en": "The heating mode changed",
+    "nl": "De verwarmingsmodus is veranderd",
+    "de": "Der Heizmodus hat sich geändert",
+    "fr": "Le mode chauffage a changé"
+  },
+  "hint": {
+    "en": "When the heating mode changes",
+    "nl": "Wanneer de verwarmingsmodus verandert",
+    "de": "Wenn sich der Heizmodus ändert",
+    "fr": "Quand le mode chauffage change"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=atagone"
+    }
+  ],
+  "tokens": [
+    {
+      "name": "mode",
+      "type": "string",
+      "title": {
+        "en": "Mode",
+        "nl": "Modus",
+        "de": "Modus",
+        "fr": "Mode"
+      },
+      "example": "auto"
+    }
+  ]
+}

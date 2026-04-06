@@ -1,0 +1,21 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Hot water minimum temperature",
+    "nl": "Minimale tapwatertemperatuur",
+    "de": "Minimale Warmwassertemperatur",
+    "fr": "Température minimale eau chaude"
+  },
+  "units": {
+    "en": "°C",
+    "nl": "°C",
+    "de": "°C",
+    "fr": "°C"
+  },
+  "insights": false,
+  "decimals": 1,
+  "getable": true,
+  "setable": false,
+  "icon": "/assets/temperature_generic.svg",
+  "uiComponent": "sensor"
+}

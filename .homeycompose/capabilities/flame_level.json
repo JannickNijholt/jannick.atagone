@@ -1,0 +1,22 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Flame level",
+    "nl": "Vlamniveau",
+    "de": "Flammenstufe",
+    "fr": "Niveau de flamme"
+  },
+  "units": {
+    "en": "%",
+    "nl": "%",
+    "de": "%",
+    "fr": "%"
+  },
+  "insights": true,
+  "chartType": "spline",
+  "decimals": 0,
+  "getable": true,
+  "setable": false,
+  "icon": "/assets/flame_generic.svg",
+  "uiComponent": "sensor"
+}

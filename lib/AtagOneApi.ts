@@ -65,6 +65,15 @@ export interface RetrieveResponse {
       dhw_flow_rate?: number;
       resets?: number;
       memory_allocation?: number;
+      details?: {
+        rel_mod_level?: number;
+      };
+    };
+    configuration?: {
+      download_url?: string;
+      temp_unit?: number;
+      dhw_max_set?: number;
+      dhw_min_set?: number;
     };
     control?: {
       ch_status?: number;
@@ -111,13 +120,28 @@ export interface UpdateResponse {
  */
 export interface ThermostatData {
   deviceId?: string;
+  apiVersion?: string;
   roomTemperature?: number;
   targetTemperature?: number;
   outsideTemperature?: number;
+  averageOutsideTemperature?: number;
+  weatherStatus?: string;
   waterPressure?: number;
-  boilerHeating?: boolean;
+  chWaterTemperature?: number;
+  chReturnTemperature?: number;
+  dhwWaterTemperature?: number;
+  burningHours?: number;
+  flameLevel?: number;
+  centralHeatingActive?: boolean;
+  burnerActive?: boolean;
   hotWaterActive?: boolean;
-  flameOn?: boolean;
+  heatingMode?: string;
+  presetMode?: string;
+  presetModeDuration?: string;
+  dhwMode?: string;
+  dhwTargetTemperature?: number;
+  dhwMinTemperature?: number;
+  dhwMaxTemperature?: number;
 }
 
 /**
@@ -144,6 +168,41 @@ export class AtagOneApi {
   private macAddress: string;
   private deviceName: string;
   private email: string;
+
+  private static readonly HEATING_MODE_MAP: Record<number, string> = {
+    0: 'heat',
+    1: 'auto',
+  };
+
+  private static readonly PRESET_MODE_MAP: Record<number, string> = {
+    1: 'manual',
+    2: 'automatic',
+    3: 'vacation',
+    4: 'extend',
+    5: 'fireplace',
+  };
+
+  private static readonly DHW_MODE_MAP: Record<number, string> = {
+    0: 'performance',
+    1: 'eco',
+  };
+
+  private static readonly WEATHER_STATUS_MAP: Record<number, string> = {
+    0: 'sunny',
+    1: 'clear',
+    2: 'rainy',
+    3: 'snowy',
+    4: 'hail',
+    5: 'windy',
+    6: 'misty',
+    7: 'cloudy',
+    8: 'partly_sunny',
+    9: 'partly_cloudy',
+    10: 'shower',
+    11: 'lightning',
+    12: 'hurricane',
+    13: 'unknown',
+  };
 
   constructor(settings: ConnectionSettings) {
     this.ipAddress = settings.ipAddress;
@@ -317,7 +376,13 @@ export class AtagOneApi {
    * Get thermostat data (temperature, status, etc.)
    */
   public async getData(): Promise<ThermostatData> {
-    const response = await this.retrieve(MessageInfo.CONTROL | MessageInfo.REPORT | MessageInfo.STATUS);
+    const response = await this.retrieve(
+      MessageInfo.CONTROL
+      | MessageInfo.CONFIGURATION
+      | MessageInfo.REPORT
+      | MessageInfo.STATUS
+      | MessageInfo.DETAILS,
+    );
     const reply = response.retrieve_reply;
 
     if (!reply) {
@@ -334,31 +399,99 @@ export class AtagOneApi {
     }
 
     const boilerStatus = reply.report?.boiler_status ?? 0;
+    const centralHeatingActive = (boilerStatus & 2) !== 0;
+    const hotWaterActive = (boilerStatus & 4) !== 0;
+    const burnerActive = (boilerStatus & 8) !== 0;
 
     // Outside temperature: prefer weather_temp (from weather service), fall back to outside_temp sensor
     const outsideTemp = reply.control?.weather_temp ?? reply.report?.outside_temp;
+    const rawDhwModeTemp = reply.control?.dhw_mode_temp;
+    const dhwModeTemperature = rawDhwModeTemp !== undefined ? rawDhwModeTemp % 150 : undefined;
 
     return {
       deviceId: reply.status?.device_id,
+      apiVersion: reply.configuration?.download_url?.split('/').pop(),
       roomTemperature: reply.report?.room_temp,
       targetTemperature: reply.control?.ch_mode_temp,
       outsideTemperature: outsideTemp,
+      averageOutsideTemperature: reply.report?.tout_avg,
+      weatherStatus: reply.control?.weather_status !== undefined
+        ? AtagOneApi.WEATHER_STATUS_MAP[reply.control.weather_status]
+        : undefined,
       waterPressure: reply.report?.ch_water_pres,
-      boilerHeating: (boilerStatus & 8) !== 0, // CH heating
-      hotWaterActive: (boilerStatus & 4) !== 0, // DHW active
-      flameOn: (boilerStatus & 8) !== 0 || (boilerStatus & 4) !== 0,
+      chWaterTemperature: reply.report?.ch_water_temp,
+      chReturnTemperature: reply.report?.ch_return_temp,
+      dhwWaterTemperature: reply.report?.dhw_water_temp,
+      burningHours: reply.report?.burning_hours,
+      flameLevel: reply.report?.details?.rel_mod_level,
+      centralHeatingActive,
+      burnerActive,
+      hotWaterActive,
+      heatingMode: reply.control?.ch_control_mode !== undefined
+        ? AtagOneApi.HEATING_MODE_MAP[reply.control.ch_control_mode]
+        : undefined,
+      presetMode: reply.control?.ch_mode !== undefined
+        ? AtagOneApi.PRESET_MODE_MAP[reply.control.ch_mode]
+        : undefined,
+      presetModeDuration: reply.control?.ch_mode_duration !== undefined
+        ? this.formatDuration(reply.control.ch_mode_duration)
+        : undefined,
+      dhwMode: hotWaterActive
+        ? AtagOneApi.DHW_MODE_MAP[reply.control?.dhw_mode ?? -1]
+        : 'off',
+      dhwTargetTemperature: hotWaterActive ? reply.control?.dhw_temp_setp : dhwModeTemperature,
+      dhwMinTemperature: reply.configuration?.dhw_min_set,
+      dhwMaxTemperature: reply.configuration?.dhw_max_set,
     };
   }
 
-  /**
-   * Set target temperature
-   * Temperature must be between 4 and 27°C, rounded to 0.5° increments
-   */
-  public async setTargetTemperature(temperature: number): Promise<void> {
-    // Validate and round temperature
-    let temp = Math.round(temperature * 2) / 2; // Round to 0.5
-    temp = Math.max(AtagOneApi.MIN_TEMP, Math.min(AtagOneApi.MAX_TEMP, temp));
+  private formatDuration(totalSeconds: number): string {
+    const safeSeconds = Math.max(0, Math.floor(totalSeconds));
+    const hours = Math.floor(safeSeconds / 3600);
+    const minutes = Math.floor((safeSeconds % 3600) / 60);
+    const seconds = safeSeconds % 60;
 
+    return [hours, minutes, seconds]
+      .map((value, index) => (index === 0 ? String(value) : String(value).padStart(2, '0')))
+      .join(':');
+  }
+
+  private normalizeHeatingMode(mode: string): number {
+    const normalizedMode = mode.trim().toLowerCase();
+
+    if (normalizedMode === 'heat') {
+      return 0;
+    }
+
+    if (normalizedMode === 'auto') {
+      return 1;
+    }
+
+    throw new Error(`Unsupported heating mode: ${mode}`);
+  }
+
+  private normalizePresetMode(mode: string): number {
+    const normalizedMode = mode.trim().toLowerCase();
+    const invertedPresetModeMap = Object.fromEntries(
+      Object.entries(AtagOneApi.PRESET_MODE_MAP).map(([key, value]) => [value.toLowerCase(), Number(key)]),
+    );
+    const presetMode = invertedPresetModeMap[normalizedMode];
+
+    if (presetMode !== undefined) {
+      return presetMode;
+    }
+
+    throw new Error(`Unsupported preset mode: ${mode}`);
+  }
+
+  private normalizeDhwTargetTemperature(temperature: number): number {
+    return Math.max(40, Math.min(65, Math.round(temperature)));
+  }
+
+  private async updateControl(
+    control: Record<string, number>,
+    configuration: Record<string, number> = {},
+  ): Promise<void> {
     const updateMessage = {
       update_message: {
         seqnr: 1,
@@ -366,9 +499,8 @@ export class AtagOneApi {
           user_account: this.email,
           mac_address: this.macAddress,
         },
-        control: {
-          ch_mode_temp: temp,
-        },
+        control,
+        configuration,
       },
     };
 
@@ -381,6 +513,47 @@ export class AtagOneApi {
     if (response.update_reply?.acc_status === AuthStatus.PENDING) {
       throw new Error('Authorization pending. Please approve on thermostat.');
     }
+  }
+
+  /**
+   * Set target temperature
+   * Temperature must be between 4 and 27°C, rounded to 0.5° increments
+   */
+  public async setTargetTemperature(temperature: number): Promise<void> {
+    // Validate and round temperature
+    let temp = Math.round(temperature * 2) / 2; // Round to 0.5
+    temp = Math.max(AtagOneApi.MIN_TEMP, Math.min(AtagOneApi.MAX_TEMP, temp));
+
+    await this.updateControl({
+      ch_mode_temp: temp,
+    });
+  }
+
+  public async setHeatingMode(mode: string): Promise<void> {
+    await this.updateControl({
+      ch_control_mode: this.normalizeHeatingMode(mode),
+    });
+  }
+
+  public async setPresetMode(mode: string): Promise<void> {
+    const presetMode = this.normalizePresetMode(mode);
+    const control: Record<string, number> = {
+      ch_mode: presetMode,
+    };
+    const configuration: Record<string, number> = {};
+
+    if (presetMode === 3) {
+      control.vacation_duration = 24 * 60 * 60;
+      configuration.start_vacation = Math.floor((Date.now() - Date.UTC(2000, 0, 1)) / 1000);
+    }
+
+    await this.updateControl(control, configuration);
+  }
+
+  public async setDhwTargetTemperature(temperature: number): Promise<void> {
+    await this.updateControl({
+      dhw_temp_setp: this.normalizeDhwTargetTemperature(temperature),
+    });
   }
 
   /**

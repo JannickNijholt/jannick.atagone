@@ -1,0 +1,58 @@
+{
+  "id": "heating_mode_is",
+  "title": {
+    "en": "Heating mode is [[mode]]",
+    "nl": "Verwarmingsmodus is [[mode]]",
+    "de": "Heizmodus ist [[mode]]",
+    "fr": "Le mode chauffage est [[mode]]"
+  },
+  "titleFormatted": {
+    "en": "Heating mode is [[mode]]",
+    "nl": "Verwarmingsmodus is [[mode]]",
+    "de": "Heizmodus ist [[mode]]",
+    "fr": "Le mode chauffage est [[mode]]"
+  },
+  "hint": {
+    "en": "Check the current heating mode.",
+    "nl": "Controleer de huidige verwarmingsmodus.",
+    "de": "Pruefen Sie den aktuellen Heizmodus.",
+    "fr": "Verifiez le mode chauffage actuel."
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=atagone"
+    },
+    {
+      "type": "dropdown",
+      "name": "mode",
+      "title": {
+        "en": "Mode",
+        "nl": "Modus",
+        "de": "Modus",
+        "fr": "Mode"
+      },
+      "values": [
+        {
+          "id": "heat",
+          "title": {
+            "en": "Heating",
+            "nl": "Verwarmen",
+            "de": "Heizen",
+            "fr": "Chauffage"
+          }
+        },
+        {
+          "id": "auto",
+          "title": {
+            "en": "Automatic",
+            "nl": "Automatisch",
+            "de": "Automatisch",
+            "fr": "Automatique"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "type": "boolean",
+  "title": {
+    "en": "Hot water active",
+    "nl": "Tapwater actief",
+    "de": "Warmwasser aktiv",
+    "fr": "Eau chaude active"
+  },
+  "insights": true,
+  "getable": true,
+  "setable": false,
+  "icon": "/assets/dhw_mode.svg",
+  "uiComponent": "sensor"
+}

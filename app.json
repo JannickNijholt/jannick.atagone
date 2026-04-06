@@ -45,16 +45,16 @@
       {
         "id": "boiler_started",
         "title": {
-          "en": "The boiler started heating",
-          "nl": "De ketel is begonnen met verwarmen",
-          "de": "Der Kessel hat mit dem Heizen begonnen",
-          "fr": "La chaudière a commencé à chauffer"
+          "en": "Central heating started",
+          "nl": "De CV-verwarming is gestart",
+          "de": "Die Heizung hat begonnen",
+          "fr": "Le chauffage a démarré"
         },
         "hint": {
-          "en": "When the boiler starts heating",
-          "nl": "Wanneer de ketel begint met verwarmen",
-          "de": "Wenn der Kessel mit dem Heizen beginnt",
-          "fr": "Quand la chaudière commence à chauffer"
+          "en": "When central heating becomes active",
+          "nl": "Wanneer de CV-verwarming actief wordt",
+          "de": "Wenn die Heizung aktiv wird",
+          "fr": "Quand le chauffage devient actif"
         },
         "args": [
           {
@@ -67,22 +67,250 @@
       {
         "id": "boiler_stopped",
         "title": {
-          "en": "The boiler stopped heating",
-          "nl": "De ketel is gestopt met verwarmen",
-          "de": "Der Kessel hat aufgehört zu heizen",
-          "fr": "La chaudière a arrêté de chauffer"
+          "en": "Central heating stopped",
+          "nl": "De CV-verwarming is gestopt",
+          "de": "Die Heizung hat aufgehört",
+          "fr": "Le chauffage s'est arrêté"
         },
         "hint": {
-          "en": "When the boiler stops heating",
-          "nl": "Wanneer de ketel stopt met verwarmen",
-          "de": "Wenn der Kessel aufhört zu heizen",
-          "fr": "Quand la chaudière arrête de chauffer"
+          "en": "When central heating becomes inactive",
+          "nl": "Wanneer de CV-verwarming inactief wordt",
+          "de": "Wenn die Heizung inaktiv wird",
+          "fr": "Quand le chauffage devient inactif"
         },
         "args": [
           {
             "type": "device",
             "name": "device",
             "filter": "driver_id=atagone"
+          }
+        ]
+      },
+      {
+        "id": "burner_started",
+        "title": {
+          "en": "The burner started",
+          "nl": "De brander is gestart",
+          "de": "Der Brenner ist gestartet",
+          "fr": "Le brûleur a démarré"
+        },
+        "hint": {
+          "en": "When the burner becomes active",
+          "nl": "Wanneer de brander actief wordt",
+          "de": "Wenn der Brenner aktiv wird",
+          "fr": "Quand le brûleur devient actif"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=atagone"
+          }
+        ]
+      },
+      {
+        "id": "burner_stopped",
+        "title": {
+          "en": "The burner stopped",
+          "nl": "De brander is gestopt",
+          "de": "Der Brenner hat gestoppt",
+          "fr": "Le brûleur s'est arrêté"
+        },
+        "hint": {
+          "en": "When the burner becomes inactive",
+          "nl": "Wanneer de brander inactief wordt",
+          "de": "Wenn der Brenner inaktiv wird",
+          "fr": "Quand le brûleur devient inactif"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=atagone"
+          }
+        ]
+      },
+      {
+        "id": "dhw_mode_changed",
+        "title": {
+          "en": "The hot water mode changed",
+          "nl": "De tapwatermodus is veranderd",
+          "de": "Der Warmwassermodus hat sich geändert",
+          "fr": "Le mode eau chaude a changé"
+        },
+        "hint": {
+          "en": "When the hot water mode changes",
+          "nl": "Wanneer de tapwatermodus verandert",
+          "de": "Wenn sich der Warmwassermodus ändert",
+          "fr": "Quand le mode eau chaude change"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=atagone"
+          }
+        ],
+        "tokens": [
+          {
+            "name": "mode",
+            "type": "string",
+            "title": {
+              "en": "Mode",
+              "nl": "Modus",
+              "de": "Modus",
+              "fr": "Mode"
+            },
+            "example": "eco"
+          }
+        ]
+      },
+      {
+        "id": "flame_level_changed",
+        "title": {
+          "en": "The flame level changed",
+          "nl": "Het vlamniveau is veranderd",
+          "de": "Die Flammenstufe hat sich geändert",
+          "fr": "Le niveau de flamme a changé"
+        },
+        "hint": {
+          "en": "When the flame level changes",
+          "nl": "Wanneer het vlamniveau verandert",
+          "de": "Wenn sich die Flammenstufe ändert",
+          "fr": "Quand le niveau de flamme change"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=atagone"
+          }
+        ],
+        "tokens": [
+          {
+            "name": "level",
+            "type": "number",
+            "title": {
+              "en": "Flame level (%)",
+              "nl": "Vlamniveau (%)",
+              "de": "Flammenstufe (%)",
+              "fr": "Niveau de flamme (%)"
+            },
+            "example": 42
+          }
+        ]
+      },
+      {
+        "id": "heating_mode_changed",
+        "title": {
+          "en": "The heating mode changed",
+          "nl": "De verwarmingsmodus is veranderd",
+          "de": "Der Heizmodus hat sich geändert",
+          "fr": "Le mode chauffage a changé"
+        },
+        "hint": {
+          "en": "When the heating mode changes",
+          "nl": "Wanneer de verwarmingsmodus verandert",
+          "de": "Wenn sich der Heizmodus ändert",
+          "fr": "Quand le mode chauffage change"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=atagone"
+          }
+        ],
+        "tokens": [
+          {
+            "name": "mode",
+            "type": "string",
+            "title": {
+              "en": "Mode",
+              "nl": "Modus",
+              "de": "Modus",
+              "fr": "Mode"
+            },
+            "example": "auto"
+          }
+        ]
+      },
+      {
+        "id": "hot_water_started",
+        "title": {
+          "en": "Hot water started",
+          "nl": "Tapwater is gestart",
+          "de": "Warmwasser hat begonnen",
+          "fr": "L'eau chaude a démarré"
+        },
+        "hint": {
+          "en": "When hot water production becomes active",
+          "nl": "Wanneer tapwaterproductie actief wordt",
+          "de": "Wenn die Warmwasserbereitung aktiv wird",
+          "fr": "Quand la production d'eau chaude devient active"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=atagone"
+          }
+        ]
+      },
+      {
+        "id": "hot_water_stopped",
+        "title": {
+          "en": "Hot water stopped",
+          "nl": "Tapwater is gestopt",
+          "de": "Warmwasser hat aufgehört",
+          "fr": "L'eau chaude s'est arrêtée"
+        },
+        "hint": {
+          "en": "When hot water production becomes inactive",
+          "nl": "Wanneer tapwaterproductie inactief wordt",
+          "de": "Wenn die Warmwasserbereitung inaktiv wird",
+          "fr": "Quand la production d'eau chaude devient inactive"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=atagone"
+          }
+        ]
+      },
+      {
+        "id": "preset_mode_changed",
+        "title": {
+          "en": "The preset mode changed",
+          "nl": "De presetmodus is veranderd",
+          "de": "Der Voreinstellungsmodus hat sich geändert",
+          "fr": "Le mode prédéfini a changé"
+        },
+        "hint": {
+          "en": "When the preset mode changes",
+          "nl": "Wanneer de presetmodus verandert",
+          "de": "Wenn sich der Voreinstellungsmodus ändert",
+          "fr": "Quand le mode prédéfini change"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=atagone"
+          }
+        ],
+        "tokens": [
+          {
+            "name": "mode",
+            "type": "string",
+            "title": {
+              "en": "Mode",
+              "nl": "Modus",
+              "de": "Modus",
+              "fr": "Mode"
+            },
+            "example": "automatic"
           }
         ]
       },
@@ -253,22 +481,320 @@
       {
         "id": "boiler_heating",
         "title": {
-          "en": "The boiler !{{is|is not}} heating",
-          "nl": "De ketel !{{is|is niet}} aan het verwarmen",
-          "de": "Der Kessel !{{heizt|heizt nicht}}",
-          "fr": "La chaudière !{{chauffe|ne chauffe pas}}"
+          "en": "Central heating !{{is|is not}} active",
+          "nl": "De CV-verwarming !{{is|is niet}} actief",
+          "de": "Die Heizung !{{ist|ist nicht}} aktiv",
+          "fr": "Le chauffage !{{est|n'est pas}} actif"
         },
         "hint": {
-          "en": "Check if the boiler is currently heating",
-          "nl": "Controleer of de ketel momenteel aan het verwarmen is",
-          "de": "Prüfen, ob der Kessel gerade heizt",
-          "fr": "Vérifier si la chaudière est en train de chauffer"
+          "en": "Check if central heating is currently active",
+          "nl": "Controleer of de CV-verwarming momenteel actief is",
+          "de": "Prüfen, ob die Heizung derzeit aktiv ist",
+          "fr": "Vérifier si le chauffage est actuellement actif"
         },
         "args": [
           {
             "type": "device",
             "name": "device",
             "filter": "driver_id=atagone"
+          }
+        ]
+      },
+      {
+        "id": "burner_active",
+        "title": {
+          "en": "The burner !{{is|is not}} active",
+          "nl": "De brander !{{is|is niet}} actief",
+          "de": "Der Brenner !{{ist|ist nicht}} aktiv",
+          "fr": "Le brûleur !{{est|n'est pas}} actif"
+        },
+        "hint": {
+          "en": "Check if the burner is currently active",
+          "nl": "Controleer of de brander momenteel actief is",
+          "de": "Prüfen, ob der Brenner derzeit aktiv ist",
+          "fr": "Vérifier si le brûleur est actuellement actif"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=atagone"
+          }
+        ]
+      },
+      {
+        "id": "dhw_mode_is",
+        "title": {
+          "en": "Hot water mode is [[mode]]",
+          "nl": "Tapwatermodus is [[mode]]",
+          "de": "Warmwassermodus ist [[mode]]",
+          "fr": "Le mode eau chaude est [[mode]]"
+        },
+        "titleFormatted": {
+          "en": "Hot water mode is [[mode]]",
+          "nl": "Tapwatermodus is [[mode]]",
+          "de": "Warmwassermodus ist [[mode]]",
+          "fr": "Le mode eau chaude est [[mode]]"
+        },
+        "hint": {
+          "en": "Check the current hot water mode.",
+          "nl": "Controleer de huidige tapwatermodus.",
+          "de": "Pruefen Sie den aktuellen Warmwassermodus.",
+          "fr": "Verifiez le mode eau chaude actuel."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=atagone"
+          },
+          {
+            "type": "dropdown",
+            "name": "mode",
+            "title": {
+              "en": "Mode",
+              "nl": "Modus",
+              "de": "Modus",
+              "fr": "Mode"
+            },
+            "values": [
+              {
+                "id": "off",
+                "title": {
+                  "en": "Off",
+                  "nl": "Uit",
+                  "de": "Aus",
+                  "fr": "Arret"
+                }
+              },
+              {
+                "id": "eco",
+                "title": {
+                  "en": "Eco",
+                  "nl": "Eco",
+                  "de": "Eco",
+                  "fr": "Eco"
+                }
+              },
+              {
+                "id": "performance",
+                "title": {
+                  "en": "Performance",
+                  "nl": "Comfort",
+                  "de": "Komfort",
+                  "fr": "Confort"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "flame_level_above",
+        "title": {
+          "en": "Flame level is above [[level]] %",
+          "nl": "Vlamniveau is boven [[level]] %",
+          "de": "Flammenstufe ist über [[level]] %",
+          "fr": "Le niveau de flamme est supérieur à [[level]] %"
+        },
+        "titleFormatted": {
+          "en": "Flame level is above [[level]] %",
+          "nl": "Vlamniveau is boven [[level]] %",
+          "de": "Flammenstufe ist über [[level]] %",
+          "fr": "Le niveau de flamme est supérieur à [[level]] %"
+        },
+        "hint": {
+          "en": "Check if the flame level is above a threshold",
+          "nl": "Controleer of het vlamniveau boven een drempel ligt",
+          "de": "Prüfen, ob die Flammenstufe über einem Schwellenwert liegt",
+          "fr": "Vérifier si le niveau de flamme est au-dessus d'un seuil"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=atagone"
+          },
+          {
+            "type": "number",
+            "name": "level",
+            "title": {
+              "en": "Level (%)",
+              "nl": "Niveau (%)",
+              "de": "Stufe (%)",
+              "fr": "Niveau (%)"
+            },
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "placeholder": {
+              "en": "10"
+            }
+          }
+        ]
+      },
+      {
+        "id": "heating_mode_is",
+        "title": {
+          "en": "Heating mode is [[mode]]",
+          "nl": "Verwarmingsmodus is [[mode]]",
+          "de": "Heizmodus ist [[mode]]",
+          "fr": "Le mode chauffage est [[mode]]"
+        },
+        "titleFormatted": {
+          "en": "Heating mode is [[mode]]",
+          "nl": "Verwarmingsmodus is [[mode]]",
+          "de": "Heizmodus ist [[mode]]",
+          "fr": "Le mode chauffage est [[mode]]"
+        },
+        "hint": {
+          "en": "Check the current heating mode.",
+          "nl": "Controleer de huidige verwarmingsmodus.",
+          "de": "Pruefen Sie den aktuellen Heizmodus.",
+          "fr": "Verifiez le mode chauffage actuel."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=atagone"
+          },
+          {
+            "type": "dropdown",
+            "name": "mode",
+            "title": {
+              "en": "Mode",
+              "nl": "Modus",
+              "de": "Modus",
+              "fr": "Mode"
+            },
+            "values": [
+              {
+                "id": "heat",
+                "title": {
+                  "en": "Heating",
+                  "nl": "Verwarmen",
+                  "de": "Heizen",
+                  "fr": "Chauffage"
+                }
+              },
+              {
+                "id": "auto",
+                "title": {
+                  "en": "Automatic",
+                  "nl": "Automatisch",
+                  "de": "Automatisch",
+                  "fr": "Automatique"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "hot_water_active",
+        "title": {
+          "en": "Hot water !{{is|is not}} active",
+          "nl": "Tapwater !{{is|is niet}} actief",
+          "de": "Warmwasser !{{ist|ist nicht}} aktiv",
+          "fr": "L'eau chaude !{{est|n'est pas}} active"
+        },
+        "hint": {
+          "en": "Check if hot water production is currently active",
+          "nl": "Controleer of tapwaterproductie momenteel actief is",
+          "de": "Prüfen, ob die Warmwasserbereitung derzeit aktiv ist",
+          "fr": "Vérifier si la production d'eau chaude est actuellement active"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=atagone"
+          }
+        ]
+      },
+      {
+        "id": "preset_mode_is",
+        "title": {
+          "en": "Preset mode is [[mode]]",
+          "nl": "Voorkeursmodus is [[mode]]",
+          "de": "Voreinstellungsmodus ist [[mode]]",
+          "fr": "Le mode prédéfini est [[mode]]"
+        },
+        "titleFormatted": {
+          "en": "Preset mode is [[mode]]",
+          "nl": "Voorkeursmodus is [[mode]]",
+          "de": "Voreinstellungsmodus ist [[mode]]",
+          "fr": "Le mode prédéfini est [[mode]]"
+        },
+        "hint": {
+          "en": "Check the current preset mode.",
+          "nl": "Controleer de huidige voorkeursmodus.",
+          "de": "Pruefen Sie den aktuellen Voreinstellungsmodus.",
+          "fr": "Verifiez le mode predefini actuel."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=atagone"
+          },
+          {
+            "type": "dropdown",
+            "name": "mode",
+            "title": {
+              "en": "Mode",
+              "nl": "Modus",
+              "de": "Modus",
+              "fr": "Mode"
+            },
+            "values": [
+              {
+                "id": "manual",
+                "title": {
+                  "en": "Manual",
+                  "nl": "Handmatig",
+                  "de": "Manuell",
+                  "fr": "Manuel"
+                }
+              },
+              {
+                "id": "automatic",
+                "title": {
+                  "en": "Automatic",
+                  "nl": "Automatisch",
+                  "de": "Automatisch",
+                  "fr": "Automatique"
+                }
+              },
+              {
+                "id": "vacation",
+                "title": {
+                  "en": "Vacation",
+                  "nl": "Vakantie",
+                  "de": "Urlaub",
+                  "fr": "Vacances"
+                }
+              },
+              {
+                "id": "extend",
+                "title": {
+                  "en": "Extend",
+                  "nl": "Verlengen",
+                  "de": "Verlaengern",
+                  "fr": "Prolonger"
+                }
+              },
+              {
+                "id": "fireplace",
+                "title": {
+                  "en": "Fireplace",
+                  "nl": "Open haard",
+                  "de": "Kamin",
+                  "fr": "Cheminee"
+                }
+              }
+            ]
           }
         ]
       },
@@ -362,6 +888,193 @@
       }
     ],
     "actions": [
+      {
+        "id": "set_dhw_target_temperature",
+        "title": {
+          "en": "Set the hot water temperature",
+          "nl": "Stel de tapwatertemperatuur in",
+          "de": "Warmwassertemperatur einstellen",
+          "fr": "Régler la température d'eau chaude"
+        },
+        "titleFormatted": {
+          "en": "Set the hot water temperature to [[temperature]] °C",
+          "nl": "Stel de tapwatertemperatuur in op [[temperature]] °C",
+          "de": "Warmwassertemperatur auf [[temperature]] °C einstellen",
+          "fr": "Régler la température d'eau chaude à [[temperature]] °C"
+        },
+        "hint": {
+          "en": "Set the domestic hot water target temperature",
+          "nl": "Stel de doeltemperatuur voor tapwater in",
+          "de": "Zieltemperatur für Warmwasser einstellen",
+          "fr": "Régler la température cible pour l'eau chaude"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=atagone"
+          },
+          {
+            "type": "number",
+            "name": "temperature",
+            "title": {
+              "en": "Temperature (°C)",
+              "nl": "Temperatuur (°C)",
+              "de": "Temperatur (°C)",
+              "fr": "Température (°C)"
+            },
+            "min": 40,
+            "max": 65,
+            "step": 1,
+            "placeholder": {
+              "en": "55"
+            }
+          }
+        ]
+      },
+      {
+        "id": "set_heating_mode",
+        "title": {
+          "en": "Set the heating mode",
+          "nl": "Stel de verwarmingsmodus in",
+          "de": "Heizmodus einstellen",
+          "fr": "Régler le mode chauffage"
+        },
+        "titleFormatted": {
+          "en": "Set the heating mode to [[mode]]",
+          "nl": "Stel de verwarmingsmodus in op [[mode]]",
+          "de": "Heizmodus auf [[mode]] einstellen",
+          "fr": "Régler le mode chauffage sur [[mode]]"
+        },
+        "hint": {
+          "en": "Set the heating mode.",
+          "nl": "Stel de verwarmingsmodus in.",
+          "de": "Stellen Sie den Heizmodus ein.",
+          "fr": "Reglez le mode chauffage."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=atagone"
+          },
+          {
+            "type": "dropdown",
+            "name": "mode",
+            "title": {
+              "en": "Mode",
+              "nl": "Modus",
+              "de": "Modus",
+              "fr": "Mode"
+            },
+            "values": [
+              {
+                "id": "heat",
+                "title": {
+                  "en": "Heating",
+                  "nl": "Verwarmen",
+                  "de": "Heizen",
+                  "fr": "Chauffage"
+                }
+              },
+              {
+                "id": "auto",
+                "title": {
+                  "en": "Automatic",
+                  "nl": "Automatisch",
+                  "de": "Automatisch",
+                  "fr": "Automatique"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "set_preset_mode",
+        "title": {
+          "en": "Set the preset mode",
+          "nl": "Stel de voorkeursmodus in",
+          "de": "Voreinstellungsmodus einstellen",
+          "fr": "Régler le mode prédéfini"
+        },
+        "titleFormatted": {
+          "en": "Set the preset mode to [[mode]]",
+          "nl": "Stel de voorkeursmodus in op [[mode]]",
+          "de": "Voreinstellungsmodus auf [[mode]] einstellen",
+          "fr": "Régler le mode prédéfini sur [[mode]]"
+        },
+        "hint": {
+          "en": "Set the preset mode.",
+          "nl": "Stel de voorkeursmodus in.",
+          "de": "Stellen Sie den Voreinstellungsmodus ein.",
+          "fr": "Reglez le mode predefini."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=atagone"
+          },
+          {
+            "type": "dropdown",
+            "name": "mode",
+            "title": {
+              "en": "Mode",
+              "nl": "Modus",
+              "de": "Modus",
+              "fr": "Mode"
+            },
+            "values": [
+              {
+                "id": "manual",
+                "title": {
+                  "en": "Manual",
+                  "nl": "Handmatig",
+                  "de": "Manuell",
+                  "fr": "Manuel"
+                }
+              },
+              {
+                "id": "automatic",
+                "title": {
+                  "en": "Automatic",
+                  "nl": "Automatisch",
+                  "de": "Automatisch",
+                  "fr": "Automatique"
+                }
+              },
+              {
+                "id": "vacation",
+                "title": {
+                  "en": "Vacation",
+                  "nl": "Vakantie",
+                  "de": "Urlaub",
+                  "fr": "Vacances"
+                }
+              },
+              {
+                "id": "extend",
+                "title": {
+                  "en": "Extend",
+                  "nl": "Verlengen",
+                  "de": "Verlaengern",
+                  "fr": "Prolonger"
+                }
+              },
+              {
+                "id": "fireplace",
+                "title": {
+                  "en": "Fireplace",
+                  "nl": "Open haard",
+                  "de": "Kamin",
+                  "fr": "Cheminee"
+                }
+              }
+            ]
+          }
+        ]
+      },
       {
         "id": "set_temperature",
         "title": {
@@ -481,8 +1194,25 @@
         "target_temperature",
         "measure_temperature",
         "outside_temperature",
+        "average_outside_temperature",
         "measure_pressure",
-        "alarm_generic.boiler"
+        "ch_water_temperature",
+        "ch_return_temperature",
+        "dhw_water_temperature",
+        "dhw_target_temperature",
+        "dhw_min_temperature",
+        "dhw_max_temperature",
+        "flame_level",
+        "burning_hours",
+        "weather_status",
+        "heating_mode",
+        "preset_mode",
+        "preset_mode_duration",
+        "dhw_mode",
+        "api_version",
+        "alarm_generic.boiler",
+        "alarm_burner_active",
+        "alarm_hot_water_active"
       ],
       "capabilitiesOptions": {
         "target_temperature": {
@@ -492,22 +1222,22 @@
         },
         "alarm_generic.boiler": {
           "title": {
-            "en": "Boiler heating",
-            "nl": "Ketel verwarmt",
-            "de": "Kessel heizt",
-            "fr": "Chaudière chauffe"
+            "en": "Central heating active",
+            "nl": "CV verwarming actief",
+            "de": "Heizbetrieb aktiv",
+            "fr": "Chauffage actif"
           },
           "insightsTitleTrue": {
-            "en": "Boiler started heating",
-            "nl": "Ketel begonnen met verwarmen",
-            "de": "Kessel hat mit Heizen begonnen",
-            "fr": "Chaudière a commencé à chauffer"
+            "en": "Central heating started",
+            "nl": "CV verwarming gestart",
+            "de": "Heizbetrieb gestartet",
+            "fr": "Chauffage démarré"
           },
           "insightsTitleFalse": {
-            "en": "Boiler stopped heating",
-            "nl": "Ketel gestopt met verwarmen",
-            "de": "Kessel hat mit Heizen aufgehört",
-            "fr": "Chaudière a arrêté de chauffer"
+            "en": "Central heating stopped",
+            "nl": "CV verwarming gestopt",
+            "de": "Heizbetrieb gestoppt",
+            "fr": "Chauffage arrêté"
           }
         }
       },
@@ -752,6 +1482,320 @@
     }
   ],
   "capabilities": {
+    "alarm_burner_active": {
+      "type": "boolean",
+      "title": {
+        "en": "Burner active",
+        "nl": "Brander actief",
+        "de": "Brenner aktiv",
+        "fr": "Brûleur actif"
+      },
+      "insights": true,
+      "getable": true,
+      "setable": false,
+      "icon": "/assets/boiler_status.svg",
+      "uiComponent": "sensor"
+    },
+    "alarm_hot_water_active": {
+      "type": "boolean",
+      "title": {
+        "en": "Hot water active",
+        "nl": "Tapwater actief",
+        "de": "Warmwasser aktiv",
+        "fr": "Eau chaude active"
+      },
+      "insights": true,
+      "getable": true,
+      "setable": false,
+      "icon": "/assets/dhw_mode.svg",
+      "uiComponent": "sensor"
+    },
+    "api_version": {
+      "type": "string",
+      "title": {
+        "en": "API version",
+        "nl": "API-versie",
+        "de": "API-Version",
+        "fr": "Version API"
+      },
+      "insights": false,
+      "getable": true,
+      "setable": false,
+      "icon": "/assets/device_info.svg",
+      "uiComponent": "sensor"
+    },
+    "average_outside_temperature": {
+      "type": "number",
+      "title": {
+        "en": "Average outside temperature",
+        "nl": "Gemiddelde buitentemperatuur",
+        "de": "Durchschnittliche Außentemperatur",
+        "fr": "Température extérieure moyenne"
+      },
+      "units": {
+        "en": "°C",
+        "nl": "°C",
+        "de": "°C",
+        "fr": "°C"
+      },
+      "insights": true,
+      "chartType": "spline",
+      "decimals": 1,
+      "getable": true,
+      "setable": false,
+      "icon": "/assets/outside_temperature.svg",
+      "uiComponent": "sensor"
+    },
+    "burning_hours": {
+      "type": "number",
+      "title": {
+        "en": "Burning hours",
+        "nl": "Branduren",
+        "de": "Brennstunden",
+        "fr": "Heures de brûleur"
+      },
+      "units": {
+        "en": "h",
+        "nl": "h",
+        "de": "h",
+        "fr": "h"
+      },
+      "insights": true,
+      "decimals": 0,
+      "getable": true,
+      "setable": false,
+      "icon": "/assets/duration_generic.svg",
+      "uiComponent": "sensor"
+    },
+    "ch_return_temperature": {
+      "type": "number",
+      "title": {
+        "en": "CH return temperature",
+        "nl": "CV-retourtemperatuur",
+        "de": "Heizungsrücklauftemperatur",
+        "fr": "Température retour chauffage"
+      },
+      "units": {
+        "en": "°C",
+        "nl": "°C",
+        "de": "°C",
+        "fr": "°C"
+      },
+      "insights": true,
+      "chartType": "spline",
+      "decimals": 1,
+      "getable": true,
+      "setable": false,
+      "icon": "/assets/temperature_generic.svg",
+      "uiComponent": "sensor"
+    },
+    "ch_water_temperature": {
+      "type": "number",
+      "title": {
+        "en": "CH water temperature",
+        "nl": "CV-water temperatuur",
+        "de": "Heizungswassertemperatur",
+        "fr": "Température d'eau chauffage"
+      },
+      "units": {
+        "en": "°C",
+        "nl": "°C",
+        "de": "°C",
+        "fr": "°C"
+      },
+      "insights": true,
+      "chartType": "spline",
+      "decimals": 1,
+      "getable": true,
+      "setable": false,
+      "icon": "/assets/temperature_generic.svg",
+      "uiComponent": "sensor"
+    },
+    "dhw_max_temperature": {
+      "type": "number",
+      "title": {
+        "en": "Hot water maximum temperature",
+        "nl": "Maximale tapwatertemperatuur",
+        "de": "Maximale Warmwassertemperatur",
+        "fr": "Température maximale eau chaude"
+      },
+      "units": {
+        "en": "°C",
+        "nl": "°C",
+        "de": "°C",
+        "fr": "°C"
+      },
+      "insights": false,
+      "decimals": 1,
+      "getable": true,
+      "setable": false,
+      "icon": "/assets/temperature_generic.svg",
+      "uiComponent": "sensor"
+    },
+    "dhw_min_temperature": {
+      "type": "number",
+      "title": {
+        "en": "Hot water minimum temperature",
+        "nl": "Minimale tapwatertemperatuur",
+        "de": "Minimale Warmwassertemperatur",
+        "fr": "Température minimale eau chaude"
+      },
+      "units": {
+        "en": "°C",
+        "nl": "°C",
+        "de": "°C",
+        "fr": "°C"
+      },
+      "insights": false,
+      "decimals": 1,
+      "getable": true,
+      "setable": false,
+      "icon": "/assets/temperature_generic.svg",
+      "uiComponent": "sensor"
+    },
+    "dhw_mode": {
+      "type": "enum",
+      "title": {
+        "en": "Hot water mode",
+        "nl": "Tapwatermodus",
+        "de": "Warmwassermodus",
+        "fr": "Mode eau chaude"
+      },
+      "values": [
+        {
+          "id": "off",
+          "title": {
+            "en": "Off",
+            "nl": "Uit",
+            "de": "Aus",
+            "fr": "Arret"
+          }
+        },
+        {
+          "id": "eco",
+          "title": {
+            "en": "Eco",
+            "nl": "Eco",
+            "de": "Eco",
+            "fr": "Eco"
+          }
+        },
+        {
+          "id": "performance",
+          "title": {
+            "en": "Performance",
+            "nl": "Comfort",
+            "de": "Komfort",
+            "fr": "Confort"
+          }
+        }
+      ],
+      "icon": "/assets/dhw_mode.svg",
+      "insights": false,
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor"
+    },
+    "dhw_target_temperature": {
+      "type": "number",
+      "title": {
+        "en": "Hot water target temperature",
+        "nl": "Doeltemperatuur tapwater",
+        "de": "Warmwasser-Zieltemperatur",
+        "fr": "Température cible eau chaude"
+      },
+      "units": {
+        "en": "°C",
+        "nl": "°C",
+        "de": "°C",
+        "fr": "°C"
+      },
+      "insights": true,
+      "chartType": "spline",
+      "decimals": 1,
+      "getable": true,
+      "setable": false,
+      "icon": "/assets/temperature_generic.svg",
+      "uiComponent": "sensor"
+    },
+    "dhw_water_temperature": {
+      "type": "number",
+      "title": {
+        "en": "Hot water temperature",
+        "nl": "Tapwatertemperatuur",
+        "de": "Warmwassertemperatur",
+        "fr": "Température d'eau chaude"
+      },
+      "units": {
+        "en": "°C",
+        "nl": "°C",
+        "de": "°C",
+        "fr": "°C"
+      },
+      "insights": true,
+      "chartType": "spline",
+      "decimals": 1,
+      "getable": true,
+      "setable": false,
+      "icon": "/assets/temperature_generic.svg",
+      "uiComponent": "sensor"
+    },
+    "flame_level": {
+      "type": "number",
+      "title": {
+        "en": "Flame level",
+        "nl": "Vlamniveau",
+        "de": "Flammenstufe",
+        "fr": "Niveau de flamme"
+      },
+      "units": {
+        "en": "%",
+        "nl": "%",
+        "de": "%",
+        "fr": "%"
+      },
+      "insights": true,
+      "chartType": "spline",
+      "decimals": 0,
+      "getable": true,
+      "setable": false,
+      "icon": "/assets/flame_generic.svg",
+      "uiComponent": "sensor"
+    },
+    "heating_mode": {
+      "type": "enum",
+      "title": {
+        "en": "Heating mode",
+        "nl": "Verwarmingsmodus",
+        "de": "Heizmodus",
+        "fr": "Mode chauffage"
+      },
+      "values": [
+        {
+          "id": "heat",
+          "title": {
+            "en": "Heating",
+            "nl": "Verwarmen",
+            "de": "Heizen",
+            "fr": "Chauffage"
+          }
+        },
+        {
+          "id": "auto",
+          "title": {
+            "en": "Automatic",
+            "nl": "Automatisch",
+            "de": "Automatisch",
+            "fr": "Automatique"
+          }
+        }
+      ],
+      "icon": "/assets/heating_mode.svg",
+      "insights": false,
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor"
+    },
     "outside_temperature": {
       "type": "number",
       "title": {
@@ -779,6 +1823,223 @@
       "setable": false,
       "uiComponent": "sensor",
       "icon": "/assets/outside_temperature.svg"
+    },
+    "preset_mode": {
+      "type": "enum",
+      "title": {
+        "en": "Preset mode",
+        "nl": "Voorkeursmodus",
+        "de": "Voreinstellungsmodus",
+        "fr": "Mode prédéfini"
+      },
+      "values": [
+        {
+          "id": "manual",
+          "title": {
+            "en": "Manual",
+            "nl": "Handmatig",
+            "de": "Manuell",
+            "fr": "Manuel"
+          }
+        },
+        {
+          "id": "automatic",
+          "title": {
+            "en": "Automatic",
+            "nl": "Automatisch",
+            "de": "Automatisch",
+            "fr": "Automatique"
+          }
+        },
+        {
+          "id": "vacation",
+          "title": {
+            "en": "Vacation",
+            "nl": "Vakantie",
+            "de": "Urlaub",
+            "fr": "Vacances"
+          }
+        },
+        {
+          "id": "extend",
+          "title": {
+            "en": "Extend",
+            "nl": "Verlengen",
+            "de": "Verlaengen",
+            "fr": "Prolonger"
+          }
+        },
+        {
+          "id": "fireplace",
+          "title": {
+            "en": "Fireplace",
+            "nl": "Open haard",
+            "de": "Kamin",
+            "fr": "Cheminee"
+          }
+        }
+      ],
+      "icon": "/assets/preset_mode.svg",
+      "insights": false,
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor"
+    },
+    "preset_mode_duration": {
+      "type": "string",
+      "title": {
+        "en": "Preset mode duration",
+        "nl": "Resterende presetduur",
+        "de": "Preset-Dauer",
+        "fr": "Durée du mode prédéfini"
+      },
+      "insights": false,
+      "getable": true,
+      "setable": false,
+      "icon": "/assets/duration_generic.svg",
+      "uiComponent": "sensor"
+    },
+    "weather_status": {
+      "type": "enum",
+      "title": {
+        "en": "Weather status",
+        "nl": "Weerstatus",
+        "de": "Wetterstatus",
+        "fr": "Statut meteo"
+      },
+      "values": [
+        {
+          "id": "sunny",
+          "title": {
+            "en": "Sunny",
+            "nl": "Zonnig",
+            "de": "Sonnig",
+            "fr": "Ensoleille"
+          }
+        },
+        {
+          "id": "clear",
+          "title": {
+            "en": "Clear",
+            "nl": "Helder",
+            "de": "Klar",
+            "fr": "Degage"
+          }
+        },
+        {
+          "id": "rainy",
+          "title": {
+            "en": "Rainy",
+            "nl": "Regenachtig",
+            "de": "Regnerisch",
+            "fr": "Pluvieux"
+          }
+        },
+        {
+          "id": "snowy",
+          "title": {
+            "en": "Snowy",
+            "nl": "Sneeuwachtig",
+            "de": "Schnee",
+            "fr": "Neigeux"
+          }
+        },
+        {
+          "id": "hail",
+          "title": {
+            "en": "Hail",
+            "nl": "Hagel",
+            "de": "Hagel",
+            "fr": "Grele"
+          }
+        },
+        {
+          "id": "windy",
+          "title": {
+            "en": "Windy",
+            "nl": "Winderig",
+            "de": "Windig",
+            "fr": "Venteux"
+          }
+        },
+        {
+          "id": "misty",
+          "title": {
+            "en": "Misty",
+            "nl": "Mistig",
+            "de": "Neblig",
+            "fr": "Brumeux"
+          }
+        },
+        {
+          "id": "cloudy",
+          "title": {
+            "en": "Cloudy",
+            "nl": "Bewolkt",
+            "de": "Bewoelkt",
+            "fr": "Nuageux"
+          }
+        },
+        {
+          "id": "partly_sunny",
+          "title": {
+            "en": "Partly sunny",
+            "nl": "Half zonnig",
+            "de": "Teilweise sonnig",
+            "fr": "Partiellement ensoleille"
+          }
+        },
+        {
+          "id": "partly_cloudy",
+          "title": {
+            "en": "Partly cloudy",
+            "nl": "Half bewolkt",
+            "de": "Teilweise bewoelkt",
+            "fr": "Partiellement nuageux"
+          }
+        },
+        {
+          "id": "shower",
+          "title": {
+            "en": "Shower",
+            "nl": "Bui",
+            "de": "Schauer",
+            "fr": "Averse"
+          }
+        },
+        {
+          "id": "lightning",
+          "title": {
+            "en": "Thunderstorm",
+            "nl": "Onweer",
+            "de": "Gewitter",
+            "fr": "Orage"
+          }
+        },
+        {
+          "id": "hurricane",
+          "title": {
+            "en": "Storm",
+            "nl": "Storm",
+            "de": "Sturm",
+            "fr": "Tempete"
+          }
+        },
+        {
+          "id": "unknown",
+          "title": {
+            "en": "Unknown",
+            "nl": "Onbekend",
+            "de": "Unbekannt",
+            "fr": "Inconnu"
+          }
+        }
+      ],
+      "icon": "/assets/weather_status.svg",
+      "insights": false,
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor"
     }
   }
 }

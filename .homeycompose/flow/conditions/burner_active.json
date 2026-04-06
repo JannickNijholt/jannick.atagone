@@ -1,0 +1,22 @@
+{
+  "id": "burner_active",
+  "title": {
+    "en": "The burner !{{is|is not}} active",
+    "nl": "De brander !{{is|is niet}} actief",
+    "de": "Der Brenner !{{ist|ist nicht}} aktiv",
+    "fr": "Le brûleur !{{est|n'est pas}} actif"
+  },
+  "hint": {
+    "en": "Check if the burner is currently active",
+    "nl": "Controleer of de brander momenteel actief is",
+    "de": "Prüfen, ob der Brenner derzeit aktiv ist",
+    "fr": "Vérifier si le brûleur est actuellement actif"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=atagone"
+    }
+  ]
+}

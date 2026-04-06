@@ -1,0 +1,22 @@
+{
+  "id": "hot_water_active",
+  "title": {
+    "en": "Hot water !{{is|is not}} active",
+    "nl": "Tapwater !{{is|is niet}} actief",
+    "de": "Warmwasser !{{ist|ist nicht}} aktiv",
+    "fr": "L'eau chaude !{{est|n'est pas}} active"
+  },
+  "hint": {
+    "en": "Check if hot water production is currently active",
+    "nl": "Controleer of tapwaterproductie momenteel actief is",
+    "de": "Prüfen, ob die Warmwasserbereitung derzeit aktiv ist",
+    "fr": "Vérifier si la production d'eau chaude est actuellement active"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=atagone"
+    }
+  ]
+}

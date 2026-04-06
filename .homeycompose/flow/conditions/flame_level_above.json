@@ -1,0 +1,44 @@
+{
+  "id": "flame_level_above",
+  "title": {
+    "en": "Flame level is above [[level]] %",
+    "nl": "Vlamniveau is boven [[level]] %",
+    "de": "Flammenstufe ist über [[level]] %",
+    "fr": "Le niveau de flamme est supérieur à [[level]] %"
+  },
+  "titleFormatted": {
+    "en": "Flame level is above [[level]] %",
+    "nl": "Vlamniveau is boven [[level]] %",
+    "de": "Flammenstufe ist über [[level]] %",
+    "fr": "Le niveau de flamme est supérieur à [[level]] %"
+  },
+  "hint": {
+    "en": "Check if the flame level is above a threshold",
+    "nl": "Controleer of het vlamniveau boven een drempel ligt",
+    "de": "Prüfen, ob die Flammenstufe über einem Schwellenwert liegt",
+    "fr": "Vérifier si le niveau de flamme est au-dessus d'un seuil"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=atagone"
+    },
+    {
+      "type": "number",
+      "name": "level",
+      "title": {
+        "en": "Level (%)",
+        "nl": "Niveau (%)",
+        "de": "Stufe (%)",
+        "fr": "Niveau (%)"
+      },
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "placeholder": {
+        "en": "10"
+      }
+    }
+  ]
+}

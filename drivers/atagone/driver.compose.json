@@ -10,8 +10,25 @@
     "target_temperature",
     "measure_temperature",
     "outside_temperature",
+    "average_outside_temperature",
     "measure_pressure",
-    "alarm_generic.boiler"
+    "ch_water_temperature",
+    "ch_return_temperature",
+    "dhw_water_temperature",
+    "dhw_target_temperature",
+    "dhw_min_temperature",
+    "dhw_max_temperature",
+    "flame_level",
+    "burning_hours",
+    "weather_status",
+    "heating_mode",
+    "preset_mode",
+    "preset_mode_duration",
+    "dhw_mode",
+    "api_version",
+    "alarm_generic.boiler",
+    "alarm_burner_active",
+    "alarm_hot_water_active"
   ],
   "capabilitiesOptions": {
     "target_temperature": {
@@ -21,22 +38,22 @@
     },
     "alarm_generic.boiler": {
       "title": {
-        "en": "Boiler heating",
-        "nl": "Ketel verwarmt",
-        "de": "Kessel heizt",
-        "fr": "Chaudière chauffe"
+        "en": "Central heating active",
+        "nl": "CV verwarming actief",
+        "de": "Heizbetrieb aktiv",
+        "fr": "Chauffage actif"
       },
       "insightsTitleTrue": {
-        "en": "Boiler started heating",
-        "nl": "Ketel begonnen met verwarmen",
-        "de": "Kessel hat mit Heizen begonnen",
-        "fr": "Chaudière a commencé à chauffer"
+        "en": "Central heating started",
+        "nl": "CV verwarming gestart",
+        "de": "Heizbetrieb gestartet",
+        "fr": "Chauffage démarré"
       },
       "insightsTitleFalse": {
-        "en": "Boiler stopped heating",
-        "nl": "Ketel gestopt met verwarmen",
-        "de": "Kessel hat mit Heizen aufgehört",
-        "fr": "Chaudière a arrêté de chauffer"
+        "en": "Central heating stopped",
+        "nl": "CV verwarming gestopt",
+        "de": "Heizbetrieb gestoppt",
+        "fr": "Chauffage arrêté"
       }
     }
   },

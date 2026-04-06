@@ -1,0 +1,22 @@
+{
+  "id": "hot_water_started",
+  "title": {
+    "en": "Hot water started",
+    "nl": "Tapwater is gestart",
+    "de": "Warmwasser hat begonnen",
+    "fr": "L'eau chaude a démarré"
+  },
+  "hint": {
+    "en": "When hot water production becomes active",
+    "nl": "Wanneer tapwaterproductie actief wordt",
+    "de": "Wenn die Warmwasserbereitung aktiv wird",
+    "fr": "Quand la production d'eau chaude devient active"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=atagone"
+    }
+  ]
+}

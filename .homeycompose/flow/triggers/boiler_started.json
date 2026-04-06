@@ -1,16 +1,16 @@
 {
   "id": "boiler_started",
   "title": {
-    "en": "The boiler started heating",
-    "nl": "De ketel is begonnen met verwarmen",
-    "de": "Der Kessel hat mit dem Heizen begonnen",
-    "fr": "La chaudière a commencé à chauffer"
+    "en": "Central heating started",
+    "nl": "De CV-verwarming is gestart",
+    "de": "Die Heizung hat begonnen",
+    "fr": "Le chauffage a démarré"
   },
   "hint": {
-    "en": "When the boiler starts heating",
-    "nl": "Wanneer de ketel begint met verwarmen",
-    "de": "Wenn der Kessel mit dem Heizen beginnt",
-    "fr": "Quand la chaudière commence à chauffer"
+    "en": "When central heating becomes active",
+    "nl": "Wanneer de CV-verwarming actief wordt",
+    "de": "Wenn die Heizung aktiv wird",
+    "fr": "Quand le chauffage devient actif"
   },
   "args": [
     {

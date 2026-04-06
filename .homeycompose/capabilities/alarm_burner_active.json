@@ -1,0 +1,14 @@
+{
+  "type": "boolean",
+  "title": {
+    "en": "Burner active",
+    "nl": "Brander actief",
+    "de": "Brenner aktiv",
+    "fr": "Brûleur actif"
+  },
+  "insights": true,
+  "getable": true,
+  "setable": false,
+  "icon": "/assets/boiler_status.svg",
+  "uiComponent": "sensor"
+}

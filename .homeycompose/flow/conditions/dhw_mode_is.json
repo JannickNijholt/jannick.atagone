@@ -1,0 +1,67 @@
+{
+  "id": "dhw_mode_is",
+  "title": {
+    "en": "Hot water mode is [[mode]]",
+    "nl": "Tapwatermodus is [[mode]]",
+    "de": "Warmwassermodus ist [[mode]]",
+    "fr": "Le mode eau chaude est [[mode]]"
+  },
+  "titleFormatted": {
+    "en": "Hot water mode is [[mode]]",
+    "nl": "Tapwatermodus is [[mode]]",
+    "de": "Warmwassermodus ist [[mode]]",
+    "fr": "Le mode eau chaude est [[mode]]"
+  },
+  "hint": {
+    "en": "Check the current hot water mode.",
+    "nl": "Controleer de huidige tapwatermodus.",
+    "de": "Pruefen Sie den aktuellen Warmwassermodus.",
+    "fr": "Verifiez le mode eau chaude actuel."
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=atagone"
+    },
+    {
+      "type": "dropdown",
+      "name": "mode",
+      "title": {
+        "en": "Mode",
+        "nl": "Modus",
+        "de": "Modus",
+        "fr": "Mode"
+      },
+      "values": [
+        {
+          "id": "off",
+          "title": {
+            "en": "Off",
+            "nl": "Uit",
+            "de": "Aus",
+            "fr": "Arret"
+          }
+        },
+        {
+          "id": "eco",
+          "title": {
+            "en": "Eco",
+            "nl": "Eco",
+            "de": "Eco",
+            "fr": "Eco"
+          }
+        },
+        {
+          "id": "performance",
+          "title": {
+            "en": "Performance",
+            "nl": "Comfort",
+            "de": "Komfort",
+            "fr": "Confort"
+          }
+        }
+      ]
+    }
+  ]
+}

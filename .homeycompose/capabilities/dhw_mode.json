@@ -1,0 +1,43 @@
+{
+  "type": "enum",
+  "title": {
+    "en": "Hot water mode",
+    "nl": "Tapwatermodus",
+    "de": "Warmwassermodus",
+    "fr": "Mode eau chaude"
+  },
+  "values": [
+    {
+      "id": "off",
+      "title": {
+        "en": "Off",
+        "nl": "Uit",
+        "de": "Aus",
+        "fr": "Arret"
+      }
+    },
+    {
+      "id": "eco",
+      "title": {
+        "en": "Eco",
+        "nl": "Eco",
+        "de": "Eco",
+        "fr": "Eco"
+      }
+    },
+    {
+      "id": "performance",
+      "title": {
+        "en": "Performance",
+        "nl": "Comfort",
+        "de": "Komfort",
+        "fr": "Confort"
+      }
+    }
+  ],
+  "icon": "/assets/dhw_mode.svg",
+  "insights": false,
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor"
+}

@@ -1,0 +1,22 @@
+{
+  "type": "number",
+  "title": {
+    "en": "CH water temperature",
+    "nl": "CV-water temperatuur",
+    "de": "Heizungswassertemperatur",
+    "fr": "Température d'eau chauffage"
+  },
+  "units": {
+    "en": "°C",
+    "nl": "°C",
+    "de": "°C",
+    "fr": "°C"
+  },
+  "insights": true,
+  "chartType": "spline",
+  "decimals": 1,
+  "getable": true,
+  "setable": false,
+  "icon": "/assets/temperature_generic.svg",
+  "uiComponent": "sensor"
+}

@@ -1,0 +1,35 @@
+{
+  "id": "preset_mode_changed",
+  "title": {
+    "en": "The preset mode changed",
+    "nl": "De presetmodus is veranderd",
+    "de": "Der Voreinstellungsmodus hat sich geändert",
+    "fr": "Le mode prédéfini a changé"
+  },
+  "hint": {
+    "en": "When the preset mode changes",
+    "nl": "Wanneer de presetmodus verandert",
+    "de": "Wenn sich der Voreinstellungsmodus ändert",
+    "fr": "Quand le mode prédéfini change"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=atagone"
+    }
+  ],
+  "tokens": [
+    {
+      "name": "mode",
+      "type": "string",
+      "title": {
+        "en": "Mode",
+        "nl": "Modus",
+        "de": "Modus",
+        "fr": "Mode"
+      },
+      "example": "automatic"
+    }
+  ]
+}

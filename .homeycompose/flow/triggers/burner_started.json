@@ -1,0 +1,22 @@
+{
+  "id": "burner_started",
+  "title": {
+    "en": "The burner started",
+    "nl": "De brander is gestart",
+    "de": "Der Brenner ist gestartet",
+    "fr": "Le brûleur a démarré"
+  },
+  "hint": {
+    "en": "When the burner becomes active",
+    "nl": "Wanneer de brander actief wordt",
+    "de": "Wenn der Brenner aktiv wird",
+    "fr": "Quand le brûleur devient actif"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=atagone"
+    }
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "id": "preset_mode_is",
+  "title": {
+    "en": "Preset mode is [[mode]]",
+    "nl": "Voorkeursmodus is [[mode]]",
+    "de": "Voreinstellungsmodus ist [[mode]]",
+    "fr": "Le mode prédéfini est [[mode]]"
+  },
+  "titleFormatted": {
+    "en": "Preset mode is [[mode]]",
+    "nl": "Voorkeursmodus is [[mode]]",
+    "de": "Voreinstellungsmodus ist [[mode]]",
+    "fr": "Le mode prédéfini est [[mode]]"
+  },
+  "hint": {
+    "en": "Check the current preset mode.",
+    "nl": "Controleer de huidige voorkeursmodus.",
+    "de": "Pruefen Sie den aktuellen Voreinstellungsmodus.",
+    "fr": "Verifiez le mode predefini actuel."
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=atagone"
+    },
+    {
+      "type": "dropdown",
+      "name": "mode",
+      "title": {
+        "en": "Mode",
+        "nl": "Modus",
+        "de": "Modus",
+        "fr": "Mode"
+      },
+      "values": [
+        {
+          "id": "manual",
+          "title": {
+            "en": "Manual",
+            "nl": "Handmatig",
+            "de": "Manuell",
+            "fr": "Manuel"
+          }
+        },
+        {
+          "id": "automatic",
+          "title": {
+            "en": "Automatic",
+            "nl": "Automatisch",
+            "de": "Automatisch",
+            "fr": "Automatique"
+          }
+        },
+        {
+          "id": "vacation",
+          "title": {
+            "en": "Vacation",
+            "nl": "Vakantie",
+            "de": "Urlaub",
+            "fr": "Vacances"
+          }
+        },
+        {
+          "id": "extend",
+          "title": {
+            "en": "Extend",
+            "nl": "Verlengen",
+            "de": "Verlaengern",
+            "fr": "Prolonger"
+          }
+        },
+        {
+          "id": "fireplace",
+          "title": {
+            "en": "Fireplace",
+            "nl": "Open haard",
+            "de": "Kamin",
+            "fr": "Cheminee"
+          }
+        }
+      ]
+    }
+  ]
+}

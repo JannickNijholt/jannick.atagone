@@ -1,0 +1,14 @@
+{
+  "type": "string",
+  "title": {
+    "en": "API version",
+    "nl": "API-versie",
+    "de": "API-Version",
+    "fr": "Version API"
+  },
+  "insights": false,
+  "getable": true,
+  "setable": false,
+  "icon": "/assets/device_info.svg",
+  "uiComponent": "sensor"
+}

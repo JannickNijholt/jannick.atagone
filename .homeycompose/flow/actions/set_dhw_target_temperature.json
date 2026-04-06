@@ -1,0 +1,44 @@
+{
+  "id": "set_dhw_target_temperature",
+  "title": {
+    "en": "Set the hot water temperature",
+    "nl": "Stel de tapwatertemperatuur in",
+    "de": "Warmwassertemperatur einstellen",
+    "fr": "Régler la température d'eau chaude"
+  },
+  "titleFormatted": {
+    "en": "Set the hot water temperature to [[temperature]] °C",
+    "nl": "Stel de tapwatertemperatuur in op [[temperature]] °C",
+    "de": "Warmwassertemperatur auf [[temperature]] °C einstellen",
+    "fr": "Régler la température d'eau chaude à [[temperature]] °C"
+  },
+  "hint": {
+    "en": "Set the domestic hot water target temperature",
+    "nl": "Stel de doeltemperatuur voor tapwater in",
+    "de": "Zieltemperatur für Warmwasser einstellen",
+    "fr": "Régler la température cible pour l'eau chaude"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=atagone"
+    },
+    {
+      "type": "number",
+      "name": "temperature",
+      "title": {
+        "en": "Temperature (°C)",
+        "nl": "Temperatuur (°C)",
+        "de": "Temperatur (°C)",
+        "fr": "Température (°C)"
+      },
+      "min": 40,
+      "max": 65,
+      "step": 1,
+      "placeholder": {
+        "en": "55"
+      }
+    }
+  ]
+}

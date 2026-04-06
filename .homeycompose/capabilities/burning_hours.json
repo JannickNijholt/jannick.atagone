@@ -1,0 +1,21 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Burning hours",
+    "nl": "Branduren",
+    "de": "Brennstunden",
+    "fr": "Heures de brûleur"
+  },
+  "units": {
+    "en": "h",
+    "nl": "h",
+    "de": "h",
+    "fr": "h"
+  },
+  "insights": true,
+  "decimals": 0,
+  "getable": true,
+  "setable": false,
+  "icon": "/assets/duration_generic.svg",
+  "uiComponent": "sensor"
+}

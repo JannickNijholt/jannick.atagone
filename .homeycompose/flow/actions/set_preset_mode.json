@@ -1,0 +1,85 @@
+{
+  "id": "set_preset_mode",
+  "title": {
+    "en": "Set the preset mode",
+    "nl": "Stel de voorkeursmodus in",
+    "de": "Voreinstellungsmodus einstellen",
+    "fr": "Régler le mode prédéfini"
+  },
+  "titleFormatted": {
+    "en": "Set the preset mode to [[mode]]",
+    "nl": "Stel de voorkeursmodus in op [[mode]]",
+    "de": "Voreinstellungsmodus auf [[mode]] einstellen",
+    "fr": "Régler le mode prédéfini sur [[mode]]"
+  },
+  "hint": {
+    "en": "Set the preset mode.",
+    "nl": "Stel de voorkeursmodus in.",
+    "de": "Stellen Sie den Voreinstellungsmodus ein.",
+    "fr": "Reglez le mode predefini."
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=atagone"
+    },
+    {
+      "type": "dropdown",
+      "name": "mode",
+      "title": {
+        "en": "Mode",
+        "nl": "Modus",
+        "de": "Modus",
+        "fr": "Mode"
+      },
+      "values": [
+        {
+          "id": "manual",
+          "title": {
+            "en": "Manual",
+            "nl": "Handmatig",
+            "de": "Manuell",
+            "fr": "Manuel"
+          }
+        },
+        {
+          "id": "automatic",
+          "title": {
+            "en": "Automatic",
+            "nl": "Automatisch",
+            "de": "Automatisch",
+            "fr": "Automatique"
+          }
+        },
+        {
+          "id": "vacation",
+          "title": {
+            "en": "Vacation",
+            "nl": "Vakantie",
+            "de": "Urlaub",
+            "fr": "Vacances"
+          }
+        },
+        {
+          "id": "extend",
+          "title": {
+            "en": "Extend",
+            "nl": "Verlengen",
+            "de": "Verlaengern",
+            "fr": "Prolonger"
+          }
+        },
+        {
+          "id": "fireplace",
+          "title": {
+            "en": "Fireplace",
+            "nl": "Open haard",
+            "de": "Kamin",
+            "fr": "Cheminee"
+          }
+        }
+      ]
+    }
+  ]
+}

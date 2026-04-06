@@ -1,0 +1,35 @@
+{
+  "id": "flame_level_changed",
+  "title": {
+    "en": "The flame level changed",
+    "nl": "Het vlamniveau is veranderd",
+    "de": "Die Flammenstufe hat sich geändert",
+    "fr": "Le niveau de flamme a changé"
+  },
+  "hint": {
+    "en": "When the flame level changes",
+    "nl": "Wanneer het vlamniveau verandert",
+    "de": "Wenn sich die Flammenstufe ändert",
+    "fr": "Quand le niveau de flamme change"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=atagone"
+    }
+  ],
+  "tokens": [
+    {
+      "name": "level",
+      "type": "number",
+      "title": {
+        "en": "Flame level (%)",
+        "nl": "Vlamniveau (%)",
+        "de": "Flammenstufe (%)",
+        "fr": "Niveau de flamme (%)"
+      },
+      "example": 42
+    }
+  ]
+}

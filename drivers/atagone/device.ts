@@ -32,12 +32,26 @@ module.exports = class AtagOneDevice extends Homey.Device {
   private pressureTooLowTrigger!: Homey.FlowCardTriggerDevice;
   private boilerStartedTrigger!: Homey.FlowCardTriggerDevice;
   private boilerStoppedTrigger!: Homey.FlowCardTriggerDevice;
+  private burnerStartedTrigger!: Homey.FlowCardTriggerDevice;
+  private burnerStoppedTrigger!: Homey.FlowCardTriggerDevice;
+  private hotWaterStartedTrigger!: Homey.FlowCardTriggerDevice;
+  private hotWaterStoppedTrigger!: Homey.FlowCardTriggerDevice;
+  private heatingModeChangedTrigger!: Homey.FlowCardTriggerDevice;
+  private presetModeChangedTrigger!: Homey.FlowCardTriggerDevice;
+  private dhwModeChangedTrigger!: Homey.FlowCardTriggerDevice;
+  private flameLevelChangedTrigger!: Homey.FlowCardTriggerDevice;
 
   // Previous values for change detection
   private prevRoomTemp?: number;
   private prevTargetTemp?: number;
   private prevPressure?: number;
   private prevBoilerHeating?: boolean;
+  private prevBurnerActive?: boolean;
+  private prevHotWaterActive?: boolean;
+  private prevHeatingMode?: string;
+  private prevPresetMode?: string;
+  private prevDhwMode?: string;
+  private prevFlameLevel?: number;
 
   async onInit() {
     this.log('AtagOneDevice has been initialized');
@@ -79,7 +93,28 @@ module.exports = class AtagOneDevice extends Homey.Device {
   }
 
   private async ensureCapabilities() {
-    const requiredCapabilities = ['measure_pressure', 'alarm_generic.boiler', 'outside_temperature'];
+    const requiredCapabilities = [
+      'measure_pressure',
+      'alarm_generic.boiler',
+      'alarm_burner_active',
+      'alarm_hot_water_active',
+      'outside_temperature',
+      'average_outside_temperature',
+      'ch_water_temperature',
+      'ch_return_temperature',
+      'dhw_water_temperature',
+      'dhw_target_temperature',
+      'dhw_min_temperature',
+      'dhw_max_temperature',
+      'flame_level',
+      'burning_hours',
+      'weather_status',
+      'heating_mode',
+      'preset_mode',
+      'preset_mode_duration',
+      'dhw_mode',
+      'api_version',
+    ];
 
     for (const capability of requiredCapabilities) {
       if (!this.hasCapability(capability)) {
@@ -97,6 +132,14 @@ module.exports = class AtagOneDevice extends Homey.Device {
     this.pressureTooLowTrigger = this.homey.flow.getDeviceTriggerCard('pressure_too_low');
     this.boilerStartedTrigger = this.homey.flow.getDeviceTriggerCard('boiler_started');
     this.boilerStoppedTrigger = this.homey.flow.getDeviceTriggerCard('boiler_stopped');
+    this.burnerStartedTrigger = this.homey.flow.getDeviceTriggerCard('burner_started');
+    this.burnerStoppedTrigger = this.homey.flow.getDeviceTriggerCard('burner_stopped');
+    this.hotWaterStartedTrigger = this.homey.flow.getDeviceTriggerCard('hot_water_started');
+    this.hotWaterStoppedTrigger = this.homey.flow.getDeviceTriggerCard('hot_water_stopped');
+    this.heatingModeChangedTrigger = this.homey.flow.getDeviceTriggerCard('heating_mode_changed');
+    this.presetModeChangedTrigger = this.homey.flow.getDeviceTriggerCard('preset_mode_changed');
+    this.dhwModeChangedTrigger = this.homey.flow.getDeviceTriggerCard('dhw_mode_changed');
+    this.flameLevelChangedTrigger = this.homey.flow.getDeviceTriggerCard('flame_level_changed');
 
     // Register run listener for pressure_too_low (has threshold argument)
     this.pressureTooLowTrigger.registerRunListener(async (args, state) => {
@@ -121,6 +164,36 @@ module.exports = class AtagOneDevice extends Homey.Device {
       const currentPressure = this.getCapabilityValue('measure_pressure');
       // Convert mbar back to bar for comparison
       return (currentPressure / 1000) > args.pressure;
+    });
+
+    const burnerActiveCondition = this.homey.flow.getConditionCard('burner_active');
+    burnerActiveCondition.registerRunListener(async () => this.getCapabilityValue('alarm_burner_active') === true);
+
+    const hotWaterActiveCondition = this.homey.flow.getConditionCard('hot_water_active');
+    hotWaterActiveCondition.registerRunListener(async () => this.getCapabilityValue('alarm_hot_water_active') === true);
+
+    const heatingModeCondition = this.homey.flow.getConditionCard('heating_mode_is');
+    heatingModeCondition.registerRunListener(async (args) => {
+      const currentMode = this.normalizeModeValue(this.getCapabilityValue('heating_mode'));
+      return currentMode === this.normalizeModeValue(args.mode);
+    });
+
+    const presetModeCondition = this.homey.flow.getConditionCard('preset_mode_is');
+    presetModeCondition.registerRunListener(async (args) => {
+      const currentMode = this.normalizeModeValue(this.getCapabilityValue('preset_mode'));
+      return currentMode === this.normalizeModeValue(args.mode);
+    });
+
+    const dhwModeCondition = this.homey.flow.getConditionCard('dhw_mode_is');
+    dhwModeCondition.registerRunListener(async (args) => {
+      const currentMode = this.normalizeModeValue(this.getCapabilityValue('dhw_mode'));
+      return currentMode === this.normalizeModeValue(args.mode);
+    });
+
+    const flameLevelAboveCondition = this.homey.flow.getConditionCard('flame_level_above');
+    flameLevelAboveCondition.registerRunListener(async (args) => {
+      const flameLevel = this.getCapabilityValue('flame_level');
+      return typeof flameLevel === 'number' && flameLevel > args.level;
     });
 
     // Actions
@@ -153,6 +226,29 @@ module.exports = class AtagOneDevice extends Homey.Device {
           this.error('Failed to restore previous temperature:', error);
         });
       }, durationMs);
+    });
+
+    const setHeatingModeAction = this.homey.flow.getActionCard('set_heating_mode');
+    setHeatingModeAction.registerRunListener(async (args) => {
+      const mode = this.normalizeModeValue(args.mode);
+      this.log('Flow action: Setting heating mode to', mode);
+      await this.api.setHeatingMode(mode);
+      await this.pollData();
+    });
+
+    const setPresetModeAction = this.homey.flow.getActionCard('set_preset_mode');
+    setPresetModeAction.registerRunListener(async (args) => {
+      const mode = this.normalizeModeValue(args.mode);
+      this.log('Flow action: Setting preset mode to', mode);
+      await this.api.setPresetMode(mode);
+      await this.pollData();
+    });
+
+    const setDhwTargetTemperatureAction = this.homey.flow.getActionCard('set_dhw_target_temperature');
+    setDhwTargetTemperatureAction.registerRunListener(async (args) => {
+      this.log('Flow action: Setting DHW target temperature to', args.temperature);
+      await this.api.setDhwTargetTemperature(args.temperature);
+      await this.pollData();
     });
   }
 
@@ -386,6 +482,14 @@ module.exports = class AtagOneDevice extends Homey.Device {
     await new Promise((resolve) => setTimeout(resolve, ms));
   }
 
+  private normalizeModeValue(value: unknown): string {
+    if (typeof value !== 'string') {
+      return '';
+    }
+
+    return value.trim().toLowerCase();
+  }
+
   private async updateCapabilitiesAndTriggerFlows(data: ThermostatData) {
     // Room temperature
     if (data.roomTemperature !== undefined) {
@@ -415,6 +519,10 @@ module.exports = class AtagOneDevice extends Homey.Device {
       this.log('Outside temperature not available from thermostat');
     }
 
+    if (data.averageOutsideTemperature !== undefined) {
+      await this.setCapabilityValue('average_outside_temperature', data.averageOutsideTemperature);
+    }
+
     // Water pressure
     if (data.waterPressure !== undefined) {
       const pressureMbar = data.waterPressure * 1000; // Convert bar to mbar
@@ -429,18 +537,120 @@ module.exports = class AtagOneDevice extends Homey.Device {
       this.prevPressure = data.waterPressure;
     }
 
-    // Boiler heating status
-    if (data.boilerHeating !== undefined) {
-      await this.setCapabilityValue('alarm_generic.boiler', data.boilerHeating);
+    if (data.chWaterTemperature !== undefined) {
+      await this.setCapabilityValue('ch_water_temperature', data.chWaterTemperature);
+    }
 
-      if (this.prevBoilerHeating !== undefined && this.prevBoilerHeating !== data.boilerHeating) {
-        if (data.boilerHeating) {
+    if (data.chReturnTemperature !== undefined) {
+      await this.setCapabilityValue('ch_return_temperature', data.chReturnTemperature);
+    }
+
+    if (data.dhwWaterTemperature !== undefined) {
+      await this.setCapabilityValue('dhw_water_temperature', data.dhwWaterTemperature);
+    }
+
+    if (data.dhwTargetTemperature !== undefined) {
+      await this.setCapabilityValue('dhw_target_temperature', data.dhwTargetTemperature);
+    }
+
+    if (data.dhwMinTemperature !== undefined) {
+      await this.setCapabilityValue('dhw_min_temperature', data.dhwMinTemperature);
+    }
+
+    if (data.dhwMaxTemperature !== undefined) {
+      await this.setCapabilityValue('dhw_max_temperature', data.dhwMaxTemperature);
+    }
+
+    if (data.flameLevel !== undefined) {
+      await this.setCapabilityValue('flame_level', data.flameLevel);
+
+      if (this.prevFlameLevel !== undefined && this.prevFlameLevel !== data.flameLevel) {
+        await this.flameLevelChangedTrigger.trigger(this, { level: data.flameLevel });
+      }
+      this.prevFlameLevel = data.flameLevel;
+    }
+
+    if (data.burningHours !== undefined) {
+      await this.setCapabilityValue('burning_hours', data.burningHours);
+    }
+
+    if (data.weatherStatus !== undefined) {
+      await this.setCapabilityValue('weather_status', data.weatherStatus);
+    }
+
+    if (data.heatingMode !== undefined) {
+      await this.setCapabilityValue('heating_mode', data.heatingMode);
+
+      if (this.prevHeatingMode !== undefined && this.prevHeatingMode !== data.heatingMode) {
+        await this.heatingModeChangedTrigger.trigger(this, { mode: data.heatingMode });
+      }
+      this.prevHeatingMode = data.heatingMode;
+    }
+
+    if (data.presetMode !== undefined) {
+      await this.setCapabilityValue('preset_mode', data.presetMode);
+
+      if (this.prevPresetMode !== undefined && this.prevPresetMode !== data.presetMode) {
+        await this.presetModeChangedTrigger.trigger(this, { mode: data.presetMode });
+      }
+      this.prevPresetMode = data.presetMode;
+    }
+
+    if (data.presetModeDuration !== undefined) {
+      await this.setCapabilityValue('preset_mode_duration', data.presetModeDuration);
+    }
+
+    if (data.dhwMode !== undefined) {
+      await this.setCapabilityValue('dhw_mode', data.dhwMode);
+
+      if (this.prevDhwMode !== undefined && this.prevDhwMode !== data.dhwMode) {
+        await this.dhwModeChangedTrigger.trigger(this, { mode: data.dhwMode });
+      }
+      this.prevDhwMode = data.dhwMode;
+    }
+
+    if (data.apiVersion !== undefined) {
+      await this.setCapabilityValue('api_version', data.apiVersion);
+    }
+
+    if (data.burnerActive !== undefined) {
+      await this.setCapabilityValue('alarm_burner_active', data.burnerActive);
+
+      if (this.prevBurnerActive !== undefined && this.prevBurnerActive !== data.burnerActive) {
+        if (data.burnerActive) {
+          await this.burnerStartedTrigger.trigger(this);
+        } else {
+          await this.burnerStoppedTrigger.trigger(this);
+        }
+      }
+      this.prevBurnerActive = data.burnerActive;
+    }
+
+    if (data.hotWaterActive !== undefined) {
+      await this.setCapabilityValue('alarm_hot_water_active', data.hotWaterActive);
+
+      if (this.prevHotWaterActive !== undefined && this.prevHotWaterActive !== data.hotWaterActive) {
+        if (data.hotWaterActive) {
+          await this.hotWaterStartedTrigger.trigger(this);
+        } else {
+          await this.hotWaterStoppedTrigger.trigger(this);
+        }
+      }
+      this.prevHotWaterActive = data.hotWaterActive;
+    }
+
+    // Central heating status
+    if (data.centralHeatingActive !== undefined) {
+      await this.setCapabilityValue('alarm_generic.boiler', data.centralHeatingActive);
+
+      if (this.prevBoilerHeating !== undefined && this.prevBoilerHeating !== data.centralHeatingActive) {
+        if (data.centralHeatingActive) {
           await this.boilerStartedTrigger.trigger(this);
         } else {
           await this.boilerStoppedTrigger.trigger(this);
         }
       }
-      this.prevBoilerHeating = data.boilerHeating;
+      this.prevBoilerHeating = data.centralHeatingActive;
     }
   }
 

@@ -1,16 +1,16 @@
 {
   "id": "boiler_heating",
   "title": {
-    "en": "The boiler !{{is|is not}} heating",
-    "nl": "De ketel !{{is|is niet}} aan het verwarmen",
-    "de": "Der Kessel !{{heizt|heizt nicht}}",
-    "fr": "La chaudière !{{chauffe|ne chauffe pas}}"
+    "en": "Central heating !{{is|is not}} active",
+    "nl": "De CV-verwarming !{{is|is niet}} actief",
+    "de": "Die Heizung !{{ist|ist nicht}} aktiv",
+    "fr": "Le chauffage !{{est|n'est pas}} actif"
   },
   "hint": {
-    "en": "Check if the boiler is currently heating",
-    "nl": "Controleer of de ketel momenteel aan het verwarmen is",
-    "de": "Prüfen, ob der Kessel gerade heizt",
-    "fr": "Vérifier si la chaudière est en train de chauffer"
+    "en": "Check if central heating is currently active",
+    "nl": "Controleer of de CV-verwarming momenteel actief is",
+    "de": "Prüfen, ob die Heizung derzeit aktiv ist",
+    "fr": "Vérifier si le chauffage est actuellement actif"
   },
   "args": [
     {

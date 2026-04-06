@@ -1,0 +1,22 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Average outside temperature",
+    "nl": "Gemiddelde buitentemperatuur",
+    "de": "Durchschnittliche Außentemperatur",
+    "fr": "Température extérieure moyenne"
+  },
+  "units": {
+    "en": "°C",
+    "nl": "°C",
+    "de": "°C",
+    "fr": "°C"
+  },
+  "insights": true,
+  "chartType": "spline",
+  "decimals": 1,
+  "getable": true,
+  "setable": false,
+  "icon": "/assets/outside_temperature.svg",
+  "uiComponent": "sensor"
+}
