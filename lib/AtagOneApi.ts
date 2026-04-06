@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import http from 'http';
 
 /**
@@ -177,7 +178,7 @@ export class AtagOneApi {
       const options: http.RequestOptions = {
         hostname: this.ipAddress,
         port: AtagOneApi.PORT,
-        path: path,
+        path,
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -257,7 +258,7 @@ export class AtagOneApi {
   public async waitForAuthorization(
     maxAttempts: number = 30,
     intervalMs: number = 2000,
-    onStatus?: (status: AuthStatus) => void
+    onStatus?: (status: AuthStatus) => void,
   ): Promise<AuthStatus> {
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
       const status = await this.pair();
@@ -275,6 +276,7 @@ export class AtagOneApi {
       }
 
       // Wait before next attempt
+      // eslint-disable-next-line homey-app/global-timers
       await new Promise((resolve) => setTimeout(resolve, intervalMs));
     }
 
@@ -376,7 +378,7 @@ export class AtagOneApi {
     try {
       await this.retrieve(MessageInfo.STATUS);
       return true;
-    } catch {
+    } catch (error) {
       return false;
     }
   }

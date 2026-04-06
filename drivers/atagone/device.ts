@@ -1,3 +1,4 @@
+/* eslint-disable camelcase, import/extensions, import/no-unresolved, node/no-missing-import */
 import Homey from 'homey';
 import { AtagOneApi, ThermostatData } from '../../lib/AtagOneApi';
 
@@ -7,6 +8,7 @@ interface DeviceSettings {
   device_name: string;
   email: string;
   poll_interval: number;
+  offline_retry_threshold: number;
 }
 
 module.exports = class AtagOneDevice extends Homey.Device {
@@ -15,6 +17,7 @@ module.exports = class AtagOneDevice extends Homey.Device {
   private pollInterval?: ReturnType<typeof setInterval>;
   private boostTimeout?: ReturnType<typeof setTimeout>;
   private previousTemperature?: number;
+  private consecutivePollFailures = 0;
 
   // Flow card references
   private temperatureChangedTrigger!: Homey.FlowCardTriggerDevice;
@@ -140,12 +143,11 @@ module.exports = class AtagOneDevice extends Homey.Device {
 
       // Set timeout to restore previous temperature
       const durationMs = args.duration * 60 * 1000;
-      this.boostTimeout = setTimeout(async () => {
-        if (this.previousTemperature !== undefined) {
-          this.log('Boost mode ended, restoring temperature to', this.previousTemperature);
-          await this.api.setTargetTemperature(this.previousTemperature);
-          await this.setCapabilityValue('target_temperature', this.previousTemperature);
-        }
+      // eslint-disable-next-line homey-app/global-timers
+      this.boostTimeout = setTimeout(() => {
+        this.restorePreviousTemperature().catch((error) => {
+          this.error('Failed to restore previous temperature:', error);
+        });
       }, durationMs);
     });
   }
@@ -178,6 +180,10 @@ module.exports = class AtagOneDevice extends Homey.Device {
     if (changedKeys.includes('poll_interval')) {
       this.startPolling(newSettings.poll_interval as number);
     }
+
+    if (changedKeys.includes('offline_retry_threshold')) {
+      this.log('Offline retry threshold updated to:', newSettings.offline_retry_threshold);
+    }
   }
 
   async onRenamed(name: string) {
@@ -197,7 +203,12 @@ module.exports = class AtagOneDevice extends Homey.Device {
     this.stopPolling();
     const intervalMs = intervalSeconds * 1000;
     this.log('Starting polling with interval:', intervalMs, 'ms');
-    this.pollInterval = setInterval(() => this.pollData(), intervalMs);
+    // eslint-disable-next-line homey-app/global-timers
+    this.pollInterval = setInterval(() => {
+      this.pollData().catch((error) => {
+        this.error('Polling interval handler failed:', error);
+      });
+    }, intervalMs);
   }
 
   private stopPolling() {
@@ -209,10 +220,15 @@ module.exports = class AtagOneDevice extends Homey.Device {
   }
 
   private async pollData() {
+    const settings = this.getSettings() as DeviceSettings;
+    const offlineRetryThreshold = Math.max(1, settings.offline_retry_threshold ?? 10);
+
     try {
       this.log('Polling thermostat data...');
       const data = await this.api.getData();
       this.log('Received data:', data);
+
+      this.consecutivePollFailures = 0;
 
       // Update capabilities and trigger flows
       await this.updateCapabilitiesAndTriggerFlows(data);
@@ -223,8 +239,31 @@ module.exports = class AtagOneDevice extends Homey.Device {
       }
     } catch (error) {
       this.error('Failed to poll thermostat:', error);
-      await this.setUnavailable('Connection failed');
+      this.consecutivePollFailures += 1;
+
+      if (this.consecutivePollFailures >= offlineRetryThreshold) {
+        await this.setUnavailable(
+          `Connection failed after ${this.consecutivePollFailures} consecutive attempts`,
+        );
+      } else {
+        this.log(
+          'Keeping device available after failed poll attempt',
+          this.consecutivePollFailures,
+          'of',
+          offlineRetryThreshold,
+        );
+      }
     }
+  }
+
+  private async restorePreviousTemperature() {
+    if (this.previousTemperature === undefined) {
+      return;
+    }
+
+    this.log('Boost mode ended, restoring temperature to', this.previousTemperature);
+    await this.api.setTargetTemperature(this.previousTemperature);
+    await this.setCapabilityValue('target_temperature', this.previousTemperature);
   }
 
   private async updateCapabilitiesAndTriggerFlows(data: ThermostatData) {

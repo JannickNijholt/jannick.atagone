@@ -158,6 +158,25 @@
             "de": "Wie oft der Thermostat auf Updates abgefragt wird",
             "fr": "Fréquence de sondage du thermostat pour les mises à jour"
           }
+        },
+        {
+          "id": "offline_retry_threshold",
+          "type": "number",
+          "label": {
+            "en": "Offline after failed polls",
+            "nl": "Offline na mislukte polls",
+            "de": "Offline nach fehlgeschlagenen Abfragen",
+            "fr": "Hors ligne apres echec des sondages"
+          },
+          "value": 10,
+          "min": 1,
+          "max": 100,
+          "hint": {
+            "en": "Number of consecutive failed polls before Homey marks the thermostat as offline",
+            "nl": "Aantal opeenvolgende mislukte polls voordat Homey de thermostaat als offline markeert",
+            "de": "Anzahl aufeinanderfolgender fehlgeschlagener Abfragen, bevor Homey das Thermostat als offline markiert",
+            "fr": "Nombre de sondages consecutifs echoues avant que Homey marque le thermostat hors ligne"
+          }
         }
       ]
     }

@@ -1,3 +1,4 @@
+/* eslint-disable camelcase, import/extensions, import/no-unresolved, node/no-missing-import */
 import Homey from 'homey';
 import { AtagOneApi, AuthStatus } from '../../lib/AtagOneApi';
 
@@ -99,6 +100,7 @@ module.exports = class AtagOneDriver extends Homey.Driver {
           device_name: this.pairingData.deviceName,
           email: this.pairingData.email,
           poll_interval: 30,
+          offline_retry_threshold: 10,
         },
       }];
 
